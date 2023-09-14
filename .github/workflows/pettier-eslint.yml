@@ -12,7 +12,11 @@ jobs:
         
     steps:    
     - uses: actions/checkout@v3
+    - name: Install prettier
+      run: npm install prettier
     - name: Run prettier
       run: npm run prettier
+    - name: Install ESLint
+      run: npm install eslint
     - name: Run eslint
       run: npm run lint
