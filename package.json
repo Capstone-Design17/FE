@@ -12,12 +12,18 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "dev": "react-scripts start",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-     "prettier": "prettier --cache --write .",
+    "postinstall": "husky install",
+    "prettier:check": "prettier --cache -c .",
+    "prettier:fix": "prettier --cache -w .",
     "lint": "eslint --cache ."
+  },
+  "lint-staged": {
+    "*.{js,ts}": "eslint --cache"
   },
   "eslintConfig": {
     "extends": [
@@ -36,5 +42,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint": "^8.49.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-react": "^7.33.2",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.1",
+    "prettier": "^3.0.3"
   }
 }
