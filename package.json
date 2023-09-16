@@ -20,7 +20,8 @@
     "postinstall": "husky install",
     "prettier:check": "prettier --cache -c .",
     "prettier:fix": "prettier --cache -w .",
-    "lint": "eslint --cache ."
+    "lint:check": "eslint --cache .",
+    "lint:fix": "eslint --cache --fix ."
   },
   "lint-staged": {
     "*.{js,ts}": "eslint --cache"

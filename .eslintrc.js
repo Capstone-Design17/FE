@@ -27,5 +27,7 @@ module.exports = {
       version: 'detect', // You can specify the React version here
     },
   },
-  rules: {},
+  rules: {
+    semi: [2, 'always'],
+  },
 };
