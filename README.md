@@ -30,10 +30,12 @@ $ npm run build
 
 ```bash
 # prettier
-$ npm run prettier
+$ npm run prettier:check
+$ npm run prettier:fix
 
 # lint
-$ npm run lint
+$ npm run lint:check
+$ npm run lint:fix
 ```
 
 ## Test
