@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo Run prettier!
+npm run prettier:fix
+npm run prettier:check
+echo Run Lint-staged!
+npx lint-staged
