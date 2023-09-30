@@ -5,14 +5,7 @@ module.exports = {
     jest: true,
     es2021: true,
   },
-  ignorePatterns: [
-    'node_modules/',
-    '**/node_modules/',
-    '/**/node_modules/*',
-    'out/',
-    'dist/',
-    'build/',
-  ],
+  ignorePatterns: ['node_modules/', '**/node_modules/', '/**/node_modules/*', 'out/', 'dist/', 'build/'],
   extends: ['eslint:recommended', 'plugin:react/recommended', 'prettier'],
   overrides: [
     {

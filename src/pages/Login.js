@@ -8,16 +8,41 @@ function Login() {
 
   return (
     <Background>
-      <h1>로그인 하세요</h1>
-      <form>
-        ID : <input type="text" /> <br />
-        PW : <input type="text" /> <br />
-        <button>로그인</button>
-      </form>
-      <Link to={'/signup'}>
+      <div className="titleWrap">로그인하세요</div>
+
+      <div className="contentWrap">
+        <div className="inputTitle">아이디</div>
+        <div className="inputWrap">
+          <input className="input" type="text" placeholder="아이디 입력" /> <br />
+        </div>
+        <div className="errorMessageWrap">올바른 아이디를 입력해주세요.</div>
+
+        <div className="inputTitle">비밀번호</div>
+        <div className="inputWrap">
+          <input className="input" type="text" placeholder="영문, 숫자, 특수문자 포함(8~20자)" /> <br />
+        </div>
+        <div className="errorMessageWrap">비밀번호는 영문, 숫자 특수문자를 포함한 8~20자입니다.</div>
+
+        <div className="linksWrap">
+          <Link to={'/signup'}>회원가입</Link>
+          {/* <div>회원가입</div>  */}
+          <span>|</span>
+          <div>아이디 찾기</div>
+          <span>|</span>
+          <div>비밀번호 찾기</div>
+        </div>
+      </div>
+
+      <div>
+        <button disabled={true} className="bottomButton">
+          로그인
+        </button>
+      </div>
+
+      {/* <Link to={'/signup'}>
         <button>회원가입</button>
       </Link>
-      <button>비밀번호 찾기</button>
+      <button>비밀번호 찾기</button> */}
     </Background>
   );
 }
