@@ -5,6 +5,14 @@ module.exports = {
     jest: true,
     es2021: true,
   },
+  ignorePatterns: [
+    'node_modules/',
+    '**/node_modules/',
+    '/**/node_modules/*',
+    'out/',
+    'dist/',
+    'build/',
+  ],
   extends: ['eslint:recommended', 'plugin:react/recommended', 'prettier'],
   overrides: [
     {
@@ -29,5 +37,6 @@ module.exports = {
   },
   rules: {
     semi: [2, 'always'],
+    'react/prop-types': 'off',
   },
 };
