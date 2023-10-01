@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styles/Home.css';
 import Background from '../components/Background.js';
 import { Link } from 'react-router-dom';
 
