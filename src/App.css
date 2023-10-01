@@ -17,6 +17,7 @@ body {
   background-color: #282c34;
 }
 .App-background {
+  overflow: hidden;
   box-sizing: border-box;
   min-height: 100vh;
   justify-content: center;
@@ -31,7 +32,6 @@ body {
   transform: translate(-50%, 0);
   height: 100%;
   background-color: #f7f7f7;
-  overflow: scroll;
   display: flex;
   flex-direction: column;
 }
@@ -92,13 +92,20 @@ body {
 .contentWrap {
   margin-top: 26px;
   flex: 1;
-  overflow: scroll;
+  overflow: auto;
+  overflow-x: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
+.contentWrap::-webkit-scrollbar {
+  display: none;
+}
 .inputTitle {
   font-size: 12px;
   font-weight: 600;
   color: #262626;
+  margin-top: 26px;
 }
 
 .inputWrap {
@@ -106,11 +113,11 @@ body {
   border-radius: 8px;
   padding: 16px;
   margin-top: 8px;
+  /* margin-bottom: 26px; */
   background-color: white;
   border: 1px solid #e2e0e0;
 
   flex-direction: row;
-  /* justify-content: center; */
 }
 
 .inputWrap:focus-within {
@@ -126,7 +133,7 @@ body {
   text-align: right;
   /* padding-left: 20px; */
   /* padding-right: 2s0px; */
-  color: #dadada;
+  /* color: #dadada; */
   font-size: 14px;
   font-weight: 400;
   text-align: center;
@@ -135,6 +142,7 @@ body {
   flex-direction: row;
   align-content: space-between; */
 }
+
 
 .input {
   width: 100%;
@@ -153,22 +161,24 @@ body {
   margin-top: 8px;
   color: #ef0000;
   font-size: 12px;
-  margin-bottom: 26px;
+  /* margin-bottom: 26px; */
 }
 
 .bottomButton {
   width: 100%;
   height: 48px;
   border: none;
+  font-size: 14px;
   font-weight: 700;
   background-color: #9e30f4;
   border-radius: 64px;
   color: white;
   margin-bottom: 16px;
   cursor: pointer;
+  text-decoration-line: none;
 }
 
-.bottomButton:disabled {
+.disabled {
   background-color: #dadada;
   color: white;
 }
@@ -182,7 +192,7 @@ body {
 }
 
 .buttonsWrap {
-  padding: 10px 0px;
+  padding: 30px 0px 20px 0px;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
