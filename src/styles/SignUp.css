@@ -1,4 +1,3 @@
-
 /* SignUp */
 .titleWrap {
   margin-top: 47px;
@@ -98,14 +97,6 @@
 .disabled {
   background-color: #dadada;
   color: white;
-}
-
-.linksWrap {
-  padding: 10px 20px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  text-align: center;
 }
 
 .buttonsWrap {

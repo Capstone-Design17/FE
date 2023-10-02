@@ -1,12 +1,14 @@
 import React from 'react';
 import '../styles/SignUp.css';
 import Background from '../components/Background.js';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import axios from 'axios';
 
 function SignUp() {
   // 회원가입 Form 형식 지정 필요
   // Form 전송 시 API 호출 내용 지정 필요 및 Redirect?
+  const navigate = useNavigate();
 
   // 내 항목에 맞게 수정
   const [userInput, setUserInput] = useState({
@@ -108,7 +110,38 @@ function SignUp() {
   // axios?
   const signUp = () => {
     console.log(userInput);
-    console.log(isAllValid);
+    console.log("유효성 검증 : " + isAllValid);
+
+    axios({
+      url: 'http://localhost:8080/api/user/register', // 통신할 서버 웹문서
+      method: 'post', // 통신할 방식
+      data: { // 인자로 보낼 데이터
+        id: id,
+        pwd: pw,
+        pwdCheck: pwCheck,
+        name: name,
+        nickName: nickName,
+        phone: phone,
+        email:email,
+        birth: `${year}-${month}-${day}`,
+      }
+    })
+    .then((response) => {  // 응답 데이터 및 처리
+      console.log(response.data); //
+      if(response.status === 200) {
+        if(response.data.message === "회원가입 성공") {
+          alert("회원가입 성공");
+          navigate("/login");
+        }
+        else {
+          alert("회원가입 실패 : " + response.data.message);
+        }
+      }
+      else {
+        throw new Error('회원가입 실패 : 정의되지 않은 에러');        
+      }
+    })
+    .catch(error => alert(error));
   };
 
   return (
@@ -120,8 +153,8 @@ function SignUp() {
           <input onChange={handleInput} className="input" name="id" type="text" placeholder="아이디 입력(6~20)" />
           <br />
         </div>
-        {!isIdValid && (
-          <div className="errorMessageWrap" style={{ display: id.length > 0 ? 'block' : 'none' }}>
+        {!isIdValid && id.length > 0 && (
+          <div className="errorMessageWrap" >
             올바른 아이디를 입력해주세요.
           </div>
         )}
@@ -131,10 +164,8 @@ function SignUp() {
           <input onChange={handleInput} className="input" name="pw" type="password" placeholder="영문, 숫자, 특수문자 포함(8~20자)" />
           <br />
         </div>
-        {!isPwValid && (
-          <div className="errorMessageWrap" style={{ display: pw.length > 0 ? 'block' : 'none' }}>
-            비밀번호는 영문, 숫자, 특수문자를 포함한 8~20자입니다.
-          </div>
+        {!isPwValid && pw.length > 0 &&(
+          <div className="errorMessageWrap">비밀번호는 영문, 숫자, 특수문자를 포함한 8~20자입니다.</div>
         )}
 
         <div className="inputTitle">비밀번호 확인</div>
@@ -142,8 +173,8 @@ function SignUp() {
           <input onChange={handleInput} className="input" name="pwCheck" type="password" placeholder="비밀번호 재입력" />
           <br />
         </div>
-        {!isPwSame && (
-          <div className="errorMessageWrap" style={{ display: pwCheck.length > 0 ? 'block' : 'none' }}>
+        {!isPwSame && pwCheck.length > 0 && (
+          <div className="errorMessageWrap">
             비밀번호가 일치하지 않습니다.
           </div>
         )}
@@ -153,8 +184,8 @@ function SignUp() {
           <input onChange={handleInput} className="input" name="name" type="text" placeholder="이름을 입력하세요." />
           <br />
         </div>
-        {!isNameValid && (
-          <div className="errorMessageWrap" style={{ display: name.length > 0 ? 'block' : 'none' }}>
+        {!isNameValid && name.length > 0 && (
+          <div className="errorMessageWrap" >
             이름은 필수 입력 항목입니다.
           </div>
         )}
@@ -164,8 +195,8 @@ function SignUp() {
           <input onChange={handleInput} className="input" name="nickName" type="text" placeholder="별명을 입력하세요." />
           <br />
         </div>
-        {!isNickNameValid && (
-          <div className="errorMessageWrap" style={{ display: nickName.length > 0 ? 'block' : 'none' }}>
+        {!isNickNameValid && nickName.length > 0 &&(
+          <div className="errorMessageWrap">
             별명은 특수문자를 제외한 2~10자리여야 합니다.
           </div>
         )}
@@ -175,8 +206,8 @@ function SignUp() {
           <input onChange={handleInput} className="input" name="phone" type="text" placeholder="휴대폰 번호 입력 '-' 제외 11자리 입력" />
           <br />
         </div>
-        {!isPhoneValid && (
-          <div className="errorMessageWrap" style={{ display: phone.length > 0 ? 'block' : 'none' }}>
+        {!isPhoneValid && phone.length > 0 && (
+          <div className="errorMessageWrap">
             전화번호 양식이 올바르지 않습니다.
           </div>
         )}
@@ -186,8 +217,8 @@ function SignUp() {
           <input onChange={handleInput} className="input" name="email" type="text" placeholder="이메일 주소" />
           <br />
         </div>
-        {!isEmailValid && (
-          <div className="errorMessageWrap" style={{ display: email.length > 0 ? 'block' : 'none' }}>
+        {!isEmailValid && email.length > 0 &&  (
+          <div className="errorMessageWrap">
             이메일 양식이 올바르지 않습니다.
           </div>
         )}
