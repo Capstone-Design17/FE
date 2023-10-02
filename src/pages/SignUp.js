@@ -110,38 +110,38 @@ function SignUp() {
   // axios?
   const signUp = () => {
     console.log(userInput);
-    console.log("유효성 검증 : " + isAllValid);
+    console.log('유효성 검증 : ' + isAllValid);
 
     axios({
       url: 'http://localhost:8080/api/user/register', // 통신할 서버 웹문서
       method: 'post', // 통신할 방식
-      data: { // 인자로 보낼 데이터
+      data: {
+        // 인자로 보낼 데이터
         id: id,
         pwd: pw,
         pwdCheck: pwCheck,
         name: name,
         nickName: nickName,
         phone: phone,
-        email:email,
+        email: email,
         birth: `${year}-${month}-${day}`,
-      }
+      },
     })
-    .then((response) => {  // 응답 데이터 및 처리
-      console.log(response.data); //
-      if(response.status === 200) {
-        if(response.data.message === "회원가입 성공") {
-          alert("회원가입 성공");
-          navigate("/login");
+      .then((response) => {
+        // 응답 데이터 및 처리
+        console.log(response.data); //
+        if (response.status === 200) {
+          if (response.data.message === '회원가입 성공') {
+            alert('회원가입 성공');
+            navigate('/login');
+          } else {
+            alert('회원가입 실패 : ' + response.data.message);
+          }
+        } else {
+          throw new Error('회원가입 실패 : 정의되지 않은 에러');
         }
-        else {
-          alert("회원가입 실패 : " + response.data.message);
-        }
-      }
-      else {
-        throw new Error('회원가입 실패 : 정의되지 않은 에러');        
-      }
-    })
-    .catch(error => alert(error));
+      })
+      .catch((error) => alert(error));
   };
 
   return (
@@ -153,75 +153,49 @@ function SignUp() {
           <input onChange={handleInput} className="input" name="id" type="text" placeholder="아이디 입력(6~20)" />
           <br />
         </div>
-        {!isIdValid && id.length > 0 && (
-          <div className="errorMessageWrap" >
-            올바른 아이디를 입력해주세요.
-          </div>
-        )}
+        {!isIdValid && id.length > 0 && <div className="errorMessageWrap">올바른 아이디를 입력해주세요.</div>}
 
         <div className="inputTitle">비밀번호</div>
         <div className="inputWrap">
           <input onChange={handleInput} className="input" name="pw" type="password" placeholder="영문, 숫자, 특수문자 포함(8~20자)" />
           <br />
         </div>
-        {!isPwValid && pw.length > 0 &&(
-          <div className="errorMessageWrap">비밀번호는 영문, 숫자, 특수문자를 포함한 8~20자입니다.</div>
-        )}
+        {!isPwValid && pw.length > 0 && <div className="errorMessageWrap">비밀번호는 영문, 숫자, 특수문자를 포함한 8~20자입니다.</div>}
 
         <div className="inputTitle">비밀번호 확인</div>
         <div className="inputWrap">
           <input onChange={handleInput} className="input" name="pwCheck" type="password" placeholder="비밀번호 재입력" />
           <br />
         </div>
-        {!isPwSame && pwCheck.length > 0 && (
-          <div className="errorMessageWrap">
-            비밀번호가 일치하지 않습니다.
-          </div>
-        )}
+        {!isPwSame && pwCheck.length > 0 && <div className="errorMessageWrap">비밀번호가 일치하지 않습니다.</div>}
 
         <div className="inputTitle">이름</div>
         <div className="inputWrap">
           <input onChange={handleInput} className="input" name="name" type="text" placeholder="이름을 입력하세요." />
           <br />
         </div>
-        {!isNameValid && name.length > 0 && (
-          <div className="errorMessageWrap" >
-            이름은 필수 입력 항목입니다.
-          </div>
-        )}
+        {!isNameValid && name.length > 0 && <div className="errorMessageWrap">이름은 필수 입력 항목입니다.</div>}
 
         <div className="inputTitle">별명</div>
         <div className="inputWrap">
           <input onChange={handleInput} className="input" name="nickName" type="text" placeholder="별명을 입력하세요." />
           <br />
         </div>
-        {!isNickNameValid && nickName.length > 0 &&(
-          <div className="errorMessageWrap">
-            별명은 특수문자를 제외한 2~10자리여야 합니다.
-          </div>
-        )}
+        {!isNickNameValid && nickName.length > 0 && <div className="errorMessageWrap">별명은 특수문자를 제외한 2~10자리여야 합니다.</div>}
 
         <div className="inputTitle">전화번호</div>
         <div className="inputWrap">
           <input onChange={handleInput} className="input" name="phone" type="text" placeholder="휴대폰 번호 입력 '-' 제외 11자리 입력" />
           <br />
         </div>
-        {!isPhoneValid && phone.length > 0 && (
-          <div className="errorMessageWrap">
-            전화번호 양식이 올바르지 않습니다.
-          </div>
-        )}
+        {!isPhoneValid && phone.length > 0 && <div className="errorMessageWrap">전화번호 양식이 올바르지 않습니다.</div>}
 
         <div className="inputTitle">이메일 주소</div>
         <div className="inputWrap">
           <input onChange={handleInput} className="input" name="email" type="text" placeholder="이메일 주소" />
           <br />
         </div>
-        {!isEmailValid && email.length > 0 &&  (
-          <div className="errorMessageWrap">
-            이메일 양식이 올바르지 않습니다.
-          </div>
-        )}
+        {!isEmailValid && email.length > 0 && <div className="errorMessageWrap">이메일 양식이 올바르지 않습니다.</div>}
 
         <div className="inputTitle">생년월일</div>
         <div className="inputWrap">
