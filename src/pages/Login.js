@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../styles/Login.css';
 import Background from '../components/Background.js';
 import { Link, useNavigate } from 'react-router-dom';
+// import {isId, isPw} from '../utils/Validation.js';
 import axios from 'axios';
 
 function Login() {
@@ -42,12 +43,8 @@ function Login() {
     console.log(id, pw);
 
     // axios
-    // 응답 세션이 쿠키 저장소에 저장되어야 함?
-    // withCredentials:true??
-    // sessionStorage.setItem()???
-    // API로 로그인에 성공하면 응답 값으로 jsessionId 쿠키가 넘어옵니다. ???
     axios({
-      url: '/api/user/login', // 실제 IP값으로 수정?
+      url: '/api/user/login', // API
       method: 'post',
       withCredentials: 'true',
       data: {
@@ -60,8 +57,7 @@ function Login() {
         if (response.status === 200) {
           if (response.data.message === '로그인 성공') {
             alert('로그인 성공');
-            navigate('/board'); // Redirect할 페이지 생성 필요
-            // navigate('/login'); // 임시로 현재 페이지 유지
+            navigate('/board'); // Redirect할 페이지
           } else {
             alert('로그인 실패 : ' + response.data.message);
           }
@@ -91,7 +87,6 @@ function Login() {
 
         <div className="linksWrap">
           <Link to={'/signup'}>회원가입</Link>
-          {/* <div>회원가입</div>  */}
           <span>|</span>
           <div>아이디 찾기</div>
           <span>|</span>

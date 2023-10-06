@@ -4,6 +4,7 @@ import '../styles/SignUp.css';
 import Background from '../components/Background.js';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import {isId, isPw, isName, isNickName, isPhone, isEmail } from '../utils/Validation.js';
 import axios from 'axios';
 
 function SignUp() {
@@ -53,55 +54,17 @@ function SignUp() {
     DAY.push(d);
   }
 
-  // 유효성 검사
-  // 아이디 유효성 검사
-  const isId = (id) => {
-    const idRegex = new RegExp('[a-z0-9_-]{6,20}');
-    return idRegex.test(id);
-  };
   const isIdValid = isId(id);
-
-  // 패스워드 유효성 검사
-  const isPw = (pw) => {
-    const pwRegex = new RegExp('^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$');
-    return pwRegex.test(pw);
-  };
   const isPwValid = isPw(pw);
-
-  // 패스워드 재확인
   const isPwSame = pw === pwCheck;
-  // const pwDoubleCheck = !isPwSame ? 'pwDoubleCheck' : undefined;
-
-  // 이름 유효성 검사
-  const isName = (name) => {
-    const nameRegex = new RegExp('^[가-힣]{2,20}$');
-    return nameRegex.test(name);
-  };
   const isNameValid = isName(name);
-
-  // 별명 유효성 검사
-  const isNickName = (nickName) => {
-    const nickNameRegex = new RegExp('^[ㄱ-ㅎ가-힣a-z0-9-_]{2,10}$');
-    return nickNameRegex.test(nickName);
-  };
   const isNickNameValid = isNickName(nickName);
-
-  // 휴대폰 번호 유효성 검사
-  const isPhone = (phone) => {
-    const phoneRegex = new RegExp('01[016789][^0][0-9]{2,3}[0-9]{4,4}');
-    return phoneRegex.test(phone);
-  };
   const isPhoneValid = isPhone(phone);
-
-  // 이메일 유효성 검사
-  const isEmail = (email) => {
-    const emailRegex = new RegExp('[a-z0-9_+.-]+@([a-z0-9-]+\\.)+[a-z0-9]{2,4}$');
-    return emailRegex.test(email);
-  };
   const isEmailValid = isEmail(email);
-
+  
   // 생년월일 입력여부 확인
   const isBirth = Boolean(year && month && day);
+  
 
   // 전체 유효성 검사 후 버튼 활성화
   const isAllValid = isIdValid && isPwValid && isPwSame && isNameValid && isNickNameValid && isPhoneValid && isEmailValid && isBirth;
