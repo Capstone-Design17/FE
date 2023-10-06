@@ -9,36 +9,35 @@ export default function Session() {
   // 세션이 없으면 로그인 페이지로 Redirect
   const navigate = useNavigate();
 
-  const [id, setId] = useState();
+  const [id, setId] = useState('');
 
   // 세션 검증
   // 쿠키를 실어서 보냄
-  useEffect(() => {
-    const checkSession = () => {
-      axios({
-        method: 'get',
-        url: 'http://localhost:8080/api/user/getSession',
-        withCredentials: 'true', // 쿠키를 포함하여 보내야 함
-      })
-        .then((response) => {
-          console.log(response);
-          if (response.status === 200) {
-            if (response.data.message === '로그인이 필요합니다.') {
-              // 수정 예정
-              throw new Error();
-            } else {
-              setId(response.data.message); // 응답 받아서 넣기 // 수정
-              console.log(response.data);
-            }
+  const checkSession = () => {
+    axios({
+      method: 'get',
+      url: 'http://localhost:8080/api/user/getSession',
+      withCredentials: 'true', // 쿠키를 포함하여 보내야 함
+    })
+      .then((response) => {
+        console.log(response);
+        if (response.status === 200) {
+          if (response.data.message === '로그인이 필요합니다.') {
+            // 수정 예정
+            throw new Error(response.data.message);
+          } else {
+            setId(response.data.message); // 응답 받아서 넣기 // 수정
+            console.log(response.data);
           }
-        })
-        .catch((error) => {
-          alert('로그인 안된 상태입니다?');
-          alert(error.message);
-          navigate('/login'); // 로그인 페이지로 Redirect
-        });
-    };
+        }
+      })
+      .catch((error) => {
+        alert(error);
+        navigate('/login'); // 로그인 페이지로 Redirect
+      });
+  };
 
+  useEffect(() => {
     checkSession();
   }, [navigate]);
 
