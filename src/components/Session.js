@@ -16,7 +16,7 @@ export default function Session() {
   const checkSession = () => {
     axios({
       method: 'get',
-      url: 'http://localhost:8080/api/user/getSession',
+      url: '/api/user/getSession',
       withCredentials: 'true', // 쿠키를 포함하여 보내야 함
     })
       .then((response) => {

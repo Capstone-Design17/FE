@@ -47,7 +47,7 @@ function Login() {
     // sessionStorage.setItem()???
     // API로 로그인에 성공하면 응답 값으로 jsessionId 쿠키가 넘어옵니다. ???
     axios({
-      url: 'http://localhost:8080/api/user/login', // 실제 IP값으로 수정?
+      url: '/api/user/login', // 실제 IP값으로 수정?
       method: 'post',
       withCredentials: 'true',
       data: {
