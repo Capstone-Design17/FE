@@ -4,7 +4,7 @@ import Background from '../components/Background.js';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
-import {isId, isPw, isName, isNickName, isPhone, isEmail, isBirth} from '../utils/Validation.js';
+import { isId, isPw, isName, isNickName, isPhone, isEmail, isBirth } from '../utils/Validation.js';
 
 function SignUp() {
   // 회원가입 Form 형식 지정 필요
