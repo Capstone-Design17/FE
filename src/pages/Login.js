@@ -6,8 +6,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function Login() {
-  // 로그인 Form css 지정 및 버튼 위치 지정 필요
-  // 로그인한 ID, PW 값을 API 요청 및 Redirect?
   const navigate = useNavigate();
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');

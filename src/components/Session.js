@@ -1,4 +1,3 @@
-import React from 'react';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +8,7 @@ export default function Session() {
   // 세션이 없으면 로그인 페이지로 Redirect
   const navigate = useNavigate();
 
-  const [id, setId] = useState('');
+  const [session, setSession] = useState({valid: false, id:null});  
 
   // 세션 검증
   // 쿠키를 실어서 보냄
@@ -20,19 +19,21 @@ export default function Session() {
       withCredentials: 'true', // 쿠키를 포함하여 보내야 함
     })
       .then((response) => {
+        console.log("세션 확인");
         console.log(response);
         if (response.status === 200) {
           if (response.data.message === '로그인이 필요합니다.') {
-            // 수정 예정
+            setSession({valid:false, id:null});
             throw new Error(response.data.message);
           } else {
-            setId(response.data.message); // 응답 받아서 넣기 // 수정
+            setSession({valid:true, id:response.data.message});
             console.log(response.data);
           }
         }
       })
       .catch((error) => {
         alert(error);
+        setSession({valid:false, id:null});
         navigate('/login'); // 로그인 페이지로 Redirect
       });
   };
@@ -41,14 +42,12 @@ export default function Session() {
     checkSession();
   }, [navigate]);
 
-  return (
-    <div>
-      <div>임시 세션 확인</div>
-      <div>{id}님 환영합니다.</div>
 
-      {/* Navbar Components를 만들고 내부에 Session Components 사용하기 */}
-      {/* Logout 따로 컴포넌트로 만들어서 사용 or 여기서 호출?*/}
-      <button>Logout 버튼</button>
-    </div>
-  );
+  // const logout = () => {
+  //   // 로그아웃 axios
+  //   console.log("로그아웃");
+  //   // Redirect? 
+  // };
+
+  return session;
 }
