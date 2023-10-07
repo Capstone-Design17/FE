@@ -93,8 +93,7 @@ function Login() {
           <div>비밀번호 찾기</div>
         </div>
       </div>
-
-      <div>
+      <div className="bottomWrap">
         <button className={`bottomButton ${activeBtn}`} onClick={login}>
           로그인
         </button>

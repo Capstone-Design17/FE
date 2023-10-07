@@ -4,7 +4,7 @@ import '../styles/SignUp.css';
 import Background from '../components/Background.js';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import {isId, isPw, isName, isNickName, isPhone, isEmail } from '../utils/Validation.js';
+import { isId, isPw, isName, isNickName, isPhone, isEmail, isBirth } from '../utils/Validation.js';
 import axios from 'axios';
 
 function SignUp() {
@@ -61,13 +61,10 @@ function SignUp() {
   const isNickNameValid = isNickName(nickName);
   const isPhoneValid = isPhone(phone);
   const isEmailValid = isEmail(email);
-  
-  // 생년월일 입력여부 확인
-  const isBirth = Boolean(year && month && day);
-  
+  const isBirthValid = isBirth(year, month, day);
 
   // 전체 유효성 검사 후 버튼 활성화
-  const isAllValid = isIdValid && isPwValid && isPwSame && isNameValid && isNickNameValid && isPhoneValid && isEmailValid && isBirth;
+  const isAllValid = isIdValid && isPwValid && isPwSame && isNameValid && isNickNameValid && isPhoneValid && isEmailValid && isBirthValid;
   const activeBtn = isAllValid ? 'undefined' : 'disabled';
 
   // 통신
@@ -180,7 +177,7 @@ function SignUp() {
             })}
           </select>
         </div>
-        {!isBirth && <div className="errorMessageWrap">생년월일은 필수 입력 항목입니다.</div>}
+        {!isBirthValid && <div className="errorMessageWrap">생년월일은 필수 입력 항목입니다.</div>}
 
         <div className="buttonsWrap">
           <button className={`bottomButton ${activeBtn}`} onClick={signUp}>

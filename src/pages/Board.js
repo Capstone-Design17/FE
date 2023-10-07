@@ -3,6 +3,9 @@ import axios from 'axios';
 import Background from '../components/Background';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Session from '../components/Session';
+import Navbar from '../components/Navbar';
+import BottomNav from '../components/BottomNav.js';
 
 export default function Board() {
   // 코드의 시작에 서버에 API 요청
@@ -42,6 +45,9 @@ export default function Board() {
   };
   return (
     <Background>
+      <Navbar />
+      {/* <Logo /> */}
+      <Session />
       {/* Navbar?? */}
       <button onClick={board}>임시 세션 확인</button>
       <div>{id}님 환영합니다??.</div>
@@ -52,6 +58,7 @@ export default function Board() {
       {/* 등록된 아이템 리스트 보여주기 */}
 
       {/* Bottom Navbar */}
+      <BottomNav />
     </Background>
   );
 }
