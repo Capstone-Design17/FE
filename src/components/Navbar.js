@@ -6,7 +6,6 @@ import Typography from '@mui/material/Typography';
 import MenuIcon from '@mui/icons-material/Menu';
 
 export default function Navbar() {
-
   const openMenu = () => {
     alert('Text');
     // Modal?
