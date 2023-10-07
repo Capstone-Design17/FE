@@ -113,7 +113,7 @@ function SignUp() {
     console.log('유효성 검증 : ' + isAllValid);
 
     axios({
-      url: 'http://localhost:8080/api/user/register', // 통신할 서버 웹문서
+      url: '/api/user/register', // 통신할 서버 웹문서
       method: 'post', // 통신할 방식
       data: {
         // 인자로 보낼 데이터
