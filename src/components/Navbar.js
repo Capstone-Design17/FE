@@ -6,14 +6,21 @@ import Typography from '@mui/material/Typography';
 import MenuIcon from '@mui/icons-material/Menu';
 
 export default function Navbar() {
+
+  const openMenu = () => {
+    alert('Text');
+    // Modal?
+  };
+
   return (
     <AppBar position="static" color="error">
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Text
+          {/* 로고 넣기 */}
         </Typography>
         <IconButton size="large" edge="start" color="inherit" aria-label="menu">
-          <MenuIcon onClick={alert('Text')} />
+          <MenuIcon onClick={openMenu} />
         </IconButton>
       </Toolbar>
     </AppBar>
