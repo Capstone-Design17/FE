@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Login.css';
 import Background from '../components/Background.js';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Login() {
   // 로그인 Form css 지정 및 버튼 위치 지정 필요
   // 로그인한 ID, PW 값을 API 요청 및 Redirect?
+  const navigate = useNavigate();
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
   const [idValid, setIdValid] = useState(false);
@@ -40,6 +42,34 @@ function Login() {
     console.log(id, pw);
 
     // axios
+    // 응답 세션이 쿠키 저장소에 저장되어야 함?
+    // withCredentials:true??
+    // sessionStorage.setItem()???
+    // API로 로그인에 성공하면 응답 값으로 jsessionId 쿠키가 넘어옵니다. ???
+    axios({
+      url: 'http://localhost:8080/api/user/login', // 실제 IP값으로 수정?
+      method: 'post',
+      withCredentials: 'true',
+      data: {
+        id: id,
+        pwd: pw,
+      },
+    })
+      .then((response) => {
+        console.log(response.data);
+        if (response.status === 200) {
+          if (response.data.message === '로그인 성공') {
+            alert('로그인 성공');
+            navigate('/board'); // Redirect할 페이지 생성 필요
+            // navigate('/login'); // 임시로 현재 페이지 유지
+          } else {
+            alert('로그인 실패 : ' + response.data.message);
+          }
+        } else {
+          throw new Error('로그인 실패 : 정의되지 않은 에러');
+        }
+      })
+      .catch((error) => alert(error));
   };
 
   return (
