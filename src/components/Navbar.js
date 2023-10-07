@@ -27,36 +27,30 @@ export default function Navbar() {
   const closeMenu = () => setOpen(false);
 
   const isSessionValid = Session();
-    
+
   return (
     <>
-    <AppBar position="static" color="error">
-      <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Text
-          {/* 로고 넣기 */}
-        </Typography>
-        <IconButton size="large" edge="start" color="inherit" aria-label="menu" onClick={openMenu}>
-          <MenuIcon />
-        </IconButton>
-      </Toolbar>
-    </AppBar>
-    <Modal
-      open={open}
-      onClose={closeMenu}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-      >
-      <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          {isSessionValid.id}님
-          {/* 로그아웃 버튼 */}
-        </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+      <AppBar position="static" color="error">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Text
+            {/* 로고 넣기 */}
+          </Typography>
+          <IconButton size="large" edge="start" color="inherit" aria-label="menu" onClick={openMenu}>
+            <MenuIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      <Modal open={open} onClose={closeMenu} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            {isSessionValid.id}님{/* 로그아웃 버튼 */}
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-        </Typography>
-      </Box>
-    </Modal>
-  </>
+          </Typography>
+        </Box>
+      </Modal>
+    </>
   );
 }
