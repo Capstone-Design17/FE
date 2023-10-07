@@ -18,8 +18,8 @@ export default function Navbar() {
           Text
           {/* 로고 넣기 */}
         </Typography>
-        <IconButton size="large" edge="start" color="inherit" aria-label="menu">
-          <MenuIcon onClick={openMenu} />
+        <IconButton size="large" edge="start" color="inherit" aria-label="menu"  onClick={openMenu}>
+          <MenuIcon />
         </IconButton>
       </Toolbar>
     </AppBar>
