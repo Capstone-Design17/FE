@@ -1,5 +1,6 @@
 /* SignUp */
 .titleWrap {
+  margin: 0 20px;
   margin-top: 47px;
   font-size: 26px;
   font-weight: 700;
@@ -7,6 +8,7 @@
 }
 
 .contentWrap {
+  margin: 0 20px;
   margin-top: 26px;
   flex: 1;
   overflow: auto;

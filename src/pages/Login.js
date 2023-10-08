@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Login.css';
 import Background from '../components/Background.js';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+// import {isId, isPw} from '../utils/Validation.js';
+import axios from 'axios';
 
 function Login() {
-  // 로그인 Form css 지정 및 버튼 위치 지정 필요
-  // 로그인한 ID, PW 값을 API 요청 및 Redirect?
+  const navigate = useNavigate();
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
   const [idValid, setIdValid] = useState(false);
@@ -38,6 +39,31 @@ function Login() {
   const login = () => {
     console.log(allValid);
     console.log(id, pw);
+
+    // axios
+    axios({
+      url: '/api/user/login', // API
+      method: 'post',
+      withCredentials: 'true',
+      data: {
+        id: id,
+        pwd: pw,
+      },
+    })
+      .then((response) => {
+        console.log(response.data);
+        if (response.status === 200) {
+          if (response.data.message === '로그인 성공') {
+            alert('로그인 성공');
+            navigate('/board'); // Redirect할 페이지
+          } else {
+            alert('로그인 실패 : ' + response.data.message);
+          }
+        } else {
+          throw new Error('로그인 실패 : 정의되지 않은 에러');
+        }
+      })
+      .catch((error) => alert(error));
   };
 
   return (
@@ -59,24 +85,17 @@ function Login() {
 
         <div className="linksWrap">
           <Link to={'/signup'}>회원가입</Link>
-          {/* <div>회원가입</div>  */}
           <span>|</span>
           <div>아이디 찾기</div>
           <span>|</span>
           <div>비밀번호 찾기</div>
         </div>
       </div>
-
-      <div>
+      <div className="bottomWrap">
         <button className={`bottomButton ${activeBtn}`} onClick={login}>
           로그인
         </button>
       </div>
-
-      {/* <Link to={'/signup'}>
-        <button>회원가입</button>
-      </Link>
-      <button>비밀번호 찾기</button> */}
     </Background>
   );
 }

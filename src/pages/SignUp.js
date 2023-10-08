@@ -1,10 +1,11 @@
 import React from 'react';
+import Logo from '../components/Logo';
 import '../styles/SignUp.css';
 import Background from '../components/Background.js';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import axios from 'axios';
 import { isId, isPw, isName, isNickName, isPhone, isEmail, isBirth } from '../utils/Validation.js';
+import axios from 'axios';
 
 function SignUp() {
   // 회원가입 Form 형식 지정 필요
@@ -106,6 +107,7 @@ function SignUp() {
 
   return (
     <Background>
+      <Logo />
       <div className="titleWrap">토마토 마켓 회원가입</div>
       <div className="contentWrap">
         <div className="inputTitle">아이디</div>
