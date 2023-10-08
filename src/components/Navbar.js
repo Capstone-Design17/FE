@@ -8,9 +8,9 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
-import Session from '../utils/Session';
+import Session from 'utils/Session';
 import { useState } from 'react';
-import Logout from './Logout';
+import Logout from 'components/Logout';
 
 export default function Navbar() {
   const style = {
