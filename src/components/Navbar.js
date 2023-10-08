@@ -6,8 +6,11 @@ import Typography from '@mui/material/Typography';
 import MenuIcon from '@mui/icons-material/Menu';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import Session from './Session';
+import Button from '@mui/material/Button';
+import DialogActions from '@mui/material/DialogActions';
+import Session from '../utils/Session';
 import { useState } from 'react';
+import Logout from './Logout';
 
 export default function Navbar() {
   const style = {
@@ -15,7 +18,8 @@ export default function Navbar() {
     top: '20%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: '80%',
+    maxWidth: 400,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -27,6 +31,7 @@ export default function Navbar() {
   const closeMenu = () => setOpen(false);
 
   const isSessionValid = Session();
+  // const logoutSession = logout();
 
   return (
     <>
@@ -47,8 +52,16 @@ export default function Navbar() {
             {isSessionValid.id}님{/* 로그아웃 버튼 */}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            로그아웃하시겠습니까?
+            <br />
+            <br />
           </Typography>
+          <DialogActions>
+            <Logout />
+            <Button variant="outlined" color="error" onClick={closeMenu}>
+              취소
+            </Button>
+          </DialogActions>
         </Box>
       </Modal>
     </>
