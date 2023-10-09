@@ -1,10 +1,10 @@
 import React from 'react';
-import Logo from '../components/Logo';
-import '../styles/SignUp.css';
-import Background from '../components/Background.js';
+import Logo from 'components/Logo';
+import 'styles/SignUp.css';
+import Background from 'components/Background.js';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { isId, isPw, isName, isNickName, isPhone, isEmail, isBirth } from '../utils/Validation.js';
+import { isId, isPw, isName, isNickName, isPhone, isEmail, isBirth } from 'utils/Validation.js';
 import axios from 'axios';
 
 function SignUp() {

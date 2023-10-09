@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/Login.css';
-import Background from '../components/Background.js';
+import 'styles/Login.css';
+import Background from 'components/Background.js';
 import { Link, useNavigate } from 'react-router-dom';
 // import {isId, isPw} from '../utils/Validation.js';
 import axios from 'axios';
