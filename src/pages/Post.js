@@ -1,5 +1,5 @@
 import Background from 'components/Background';
-// import Navbar from 'components/Navbar';
+import Navbar from 'components/Navbar';
 import React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -17,6 +17,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import PopupDom from 'components/PopupDom';
+import PopupPostCode from 'components/PopupPostCode';
 
 export default function Post() {
   const navigate = useNavigate();
@@ -33,16 +35,33 @@ export default function Post() {
       // boughtUserId : 구매자, 로직으로 처리-default
   */
 
-  // 세션에서 UserId 얻기
-
   // 데이터
   const [postInput, setPostInput] = useState({
     // userId:
     // ...
   });
 
+  // 세션에서 UserId 얻기
+  const [userId, setUserId] = useState();
+  const getUserId = (id) => {
+    setUserId(id);
+  };
+
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  // 팝업창 열기
+  const openPostCode = () => {
+    setIsPopupOpen(true);
+  };
+
+  // 팝업창 닫기
+  const closePostCode = () => {
+    setIsPopupOpen(false);
+  };
+
+  const [location, setLocation] = useState();
   // axios로 보낼 값 각각 저장
-  const { userId, location, title, category, price, content, detailLocation } = postInput;
+  const { title, category, price, content, detailLocation } = postInput;
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -91,7 +110,11 @@ export default function Post() {
 
   // 통신
   const writePost = () => {
-    console.log(postInput);
+    setPostInput({ ...postInput, ['userId']: userId });
+    setLocation({ ...postInput, ['location']: location });
+    for (const x of formData.entries()) {
+      console.log(x);
+    }
     axios({
       url: '/api/board/writePost',
       method: 'post',
@@ -130,7 +153,7 @@ export default function Post() {
 
   return (
     <Background>
-      {/* <Navbar /> */}
+      <Navbar getUserId={getUserId} userId={userId} />
       <div className="titleWrap">
         <div className="title">거래 등록</div>
       </div>
@@ -204,7 +227,21 @@ export default function Post() {
           </div>
 
           {/* 지역: 도로명주소? API? */}
-          <TextField required id="outlined-required" label="지역" margin="dense" color="error" name="location" onChange={handleInput} />
+          <div>
+            <Button onClick={openPostCode} style={{ marginTop: '20px' }}>
+              우편번호 검색
+            </Button>
+            <div id="popupDom">
+              {isPopupOpen && (
+                <PopupDom>
+                  <PopupPostCode onClose={closePostCode} setLocation={setLocation} location={location} onChange={handleInput} />
+                </PopupDom>
+              )}
+              {/* {location} */}
+            </div>
+          </div>
+
+          <TextField required id="outlined-required" label="" margin="dense" color="error" value={location} />
 
           {/* 상세 주소 */}
           <TextField required id="outlined-required" label="상세 주소" margin="dense" color="error" name="detailLocation" onChange={handleInput} />

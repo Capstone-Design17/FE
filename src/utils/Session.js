@@ -39,14 +39,10 @@ export default function Session() {
   };
 
   useEffect(() => {
-    checkSession();
+    if (!session.valid) {
+      checkSession();
+    }
   }, [navigate]);
-
-  // const logout = () => {
-  //   // 로그아웃 axios
-  //   console.log("로그아웃");
-  //   // Redirect?
-  // };
 
   return session;
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Background from 'components/Background';
 import Navbar from 'components/Navbar';
@@ -9,10 +10,14 @@ import 'styles/Board.css';
 
 export default function Board() {
   // const navigate = useNavigate();
+  const [userId, setUserId] = useState();
+  const getUserId = (id) => {
+    setUserId(id);
+  };
 
   return (
     <Background>
-      <Navbar />
+      <Navbar getUserId={getUserId} userId={userId} />
       {/* 등록된 아이템 리스트 보여주기 */}
       <div className="contentWrap">
         아이템 리스트가 보여질 화면입니다.
