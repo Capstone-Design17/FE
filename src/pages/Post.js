@@ -12,13 +12,15 @@ import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import InputAdornment from '@mui/material/InputAdornment';
 import Typography from '@mui/material/Typography';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
+// import FormGroup from '@mui/material/FormGroup';
+// import FormControlLabel from '@mui/material/FormControlLabel';
+// import Checkbox from '@mui/material/Checkbox';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import PopupDom from 'components/PopupDom';
 import PopupPostCode from 'components/PopupPostCode';
+import Category from 'utils/Category';
+import { isTitle, isPrice, isContent, isDetailLocation } from 'utils/Validation';
 
 export default function Post() {
   const navigate = useNavigate();
@@ -37,8 +39,13 @@ export default function Post() {
 
   // 데이터
   const [postInput, setPostInput] = useState({
-    // userId:
-    // ...
+    userId: '',
+    location: '',
+    title: '',
+    category: '',
+    content: '',
+    price: '',
+    detailLocation: '',
   });
 
   // 세션에서 UserId 얻기
@@ -47,6 +54,7 @@ export default function Post() {
     setUserId(id);
   };
 
+  const currencies = Category();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   // 팝업창 열기
@@ -70,7 +78,11 @@ export default function Post() {
   };
 
   // validation
-  // ... required는 어떻게 동작하는지?
+  const isTitleValid = isTitle(title);
+  const isPriceValid = isPrice(price);
+  const isContentValid = isContent(content);
+  const isDetailLocationValid = isDetailLocation(detailLocation);
+  const isAllValid = isTitleValid && isPriceValid && isContentValid && isDetailLocationValid;
 
   // 이미지
   const [images, setImages] = useState([]);
@@ -85,7 +97,6 @@ export default function Post() {
         console.log(value);
       }
       console.log('이미지 개수 : ' + uploadFiles.length);
-      // console.log(uploadFiles[0].name);
       setImages(uploadFiles);
     }
   };
@@ -122,18 +133,6 @@ export default function Post() {
         'Content-Type': 'multipart/form-data',
       },
       data: formData,
-      // data: {
-      //   // new FormData()로 보냄?
-      //   // 이미지가 첨부된 데이터를 어떻게 넘기는가?
-      //   userId: userId,
-      //   // location : user에 저장된 location?
-      //   location: location,
-      //   title: title,
-      //   category: category,
-      //   price: price,
-      //   content: content,
-      //   detailLocation: detailLocation, // detailLocation을 어떻게 표현?, 시/군/구 + detail로 바꾸기?
-      // },
     })
       .then((response) => {
         console.log(response.data);
@@ -190,6 +189,7 @@ export default function Post() {
           <Grid container spacing={2}>
             <Grid item xs>
               <TextField required id="outlined-required" label="제목" fullWidth margin="normal" color="error" name="title" onChange={handleInput} />
+              {!isTitleValid && title.length > 0 && <div className="errorMessageWrap">제목을 입력해주세요.</div>}
             </Grid>
 
             {/* 카테고리 */}
@@ -219,11 +219,13 @@ export default function Post() {
                 endAdornment: <InputAdornment position="start">₩</InputAdornment>,
               }}
             />
+            {!isPriceValid && price.length > 0 && <div className="errorMessageWrap">숫자만 입력 가능합니다.</div>}
           </div>
 
           {/* 내용 */}
           <div>
             <TextField required id="outlined-multiline-static" label="내용" multiline color="error" rows={6} margin="dense" name="content" helperText="최대한 자세하게 적어주세요." onChange={handleInput} />
+            {!isContentValid && content.length > 0 && <div className="errorMessageWrap">최대 500자 입력 가능합니다.</div>}
           </div>
 
           {/* 지역: 도로명주소? API? */}
@@ -241,28 +243,33 @@ export default function Post() {
             </div>
           </div>
 
-          <TextField required id="outlined-required" label="" margin="dense" color="error" value={location} />
+          <TextField
+            required
+            id="outlined-required"
+            label=""
+            margin="dense"
+            color="error"
+            value={location || ''}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
 
           {/* 상세 주소 */}
           <TextField required id="outlined-required" label="상세 주소" margin="dense" color="error" name="detailLocation" onChange={handleInput} />
-
-          {/* 등록 체크 */}
-          <FormGroup>
-            <FormControlLabel required control={<Checkbox color="error" size="small" />} label="확인하였습니다." sx={{ color: 'text.secondary' }} />
-          </FormGroup>
+          {!isDetailLocationValid && detailLocation.length > 0 && <div className="errorMessageWrap">필수 입력 사항입니다.</div>}
         </Box>
       </div>
 
       {/* 등록 버튼 */}
-      <Grid container spacing={4} justifyContent="center" alignItems="center" marginBottom={2}>
+      <Grid container spacing={4} justifyContent="center" alignItems="center" style={{ marginTop: '10px', marginBottom: '20px' }}>
         <Grid item xs={5}>
-          <Button variant="contained" fullWidth size="large" color="error" sx={{ fontWeight: 'bold' }} onClick={writePost}>
+          <Button variant="contained" fullWidth size="large" color="error" sx={{ fontWeight: 'bold' }} onClick={writePost} disabled={!isAllValid}>
             거래 등록
             {/* axios 호출 및 redirect */}
           </Button>
         </Grid>
         <Grid item xs={5}>
-          {/* 취소 버튼 없앨 수도 */}
           <Button variant="outlined" fullWidth size="large" color="error" sx={{ fontWeight: 'bold' }}>
             <Link to="/board" style={{ textDecoration: 'none', color: '#d32f2f' }}>
               취소
@@ -286,23 +293,3 @@ const VisuallyHiddenInput = styled('input')({
   whiteSpace: 'nowrap',
   width: 1,
 });
-
-const currencies = [
-  // 카테고리 정의 : 변경 필요
-  {
-    value: '1',
-    label: 'category1',
-  },
-  {
-    value: '2',
-    label: 'category2',
-  },
-  {
-    value: '3',
-    label: 'category3',
-  },
-  {
-    value: '4',
-    label: 'category4',
-  },
-];
