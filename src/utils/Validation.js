@@ -43,3 +43,23 @@ export const isEmail = (email) => {
 export const isBirth = (year, month, day) => {
   return Boolean(year && month && day);
 };
+
+export const isTitle = (title) => {
+  const titleRegex = new RegExp('^.{5,50}$');
+  return titleRegex.test(title);
+};
+
+export const isPrice = (price) => {
+  const priceRegex = new RegExp('^[1-9]\\d*$');
+  return priceRegex.test(price);
+};
+
+export const isContent = (content) => {
+  const contentRegex = new RegExp('^.{1,500}$');
+  return contentRegex.test(content);
+};
+
+export const isDetailLocation = (detailLocation) => {
+  const detailLocationRegex = new RegExp('^.{5,60}$');
+  return detailLocationRegex.test(detailLocation);
+};
