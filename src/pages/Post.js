@@ -110,6 +110,7 @@ export default function Post() {
       price: price,
       content: content,
       detailLocation: detailLocation,
+      status: 0,
     }),
   );
   for (const value of images.values()) {

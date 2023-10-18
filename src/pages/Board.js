@@ -28,26 +28,32 @@ export default function Board() {
     axios({
       url: 'api/board/getPostList',
       method: 'get',
-    }).then((response) => {
-      console.log('Get List');
-      console.log(response);
-      if (response.status === 200) {
-        // 로컬은 어떻게?
+    })
+      .then((response) => {
+        console.log('Get List');
+        console.log(response);
+        if (response.status === 200) {
+          // 로컬은 어떻게?
 
-        // [postList, imageList]를 담은 리스트 생성
-        const post = response.data.postList;
-        const image = response.data.imageList;
-        if (post && image && post.length === image.length) {
-          const mergedList = response.data.postList.map((postItem, index) => ({
-            ...postItem,
-            image: image[index],
-          }));
-          setPostList(mergedList);
-          console.log(postList);
+          // [postList, imageList]를 담은 리스트 생성
+          const post = response.data.postList;
+          const image = response.data.imageList;
+          if (post && image && post.length === image.length) {
+            const mergedList = response.data.postList.map((postItem, index) => ({
+              ...postItem,
+              image: image[index],
+            }));
+            setPostList(mergedList);
+            console.log(postList);
+          }
+          setIsLoading(false);
+        } else {
+          throw new Error('데이터 불러오기 실패');
         }
-        setIsLoading(false);
-      }
-    });
+      })
+      .catch((error) => {
+        alert(error);
+      });
   }, [isLoading]);
 
   return (
@@ -64,13 +70,14 @@ export default function Board() {
         {isLoading ? (
           <p>Loading...</p>
         ) : postList.length > 0 ? (
-          <div style={{ overflow: 'scroll' }}>
+          <div style={{ flex: '1' }}>
             {postList.map((post, index) => {
               // index를 수정?
               const imageUrl = 'http://localhost:80/image/' + post.image.uuid;
+              // const imageUrl = '/image/' + post.image.uuid; // 운영 환경의 url
               return (
-                <Card key={index} sx={{ display: 'flex', margin: '5px 0', height: '140px' }}>
-                  <CardMedia component="img" sx={{ maxWidth: 140, overflow: 'hidden' }} image={imageUrl} alt="default" />
+                <Card key={index} sx={{ display: 'flex', margin: '5px 0', height: '130px' }}>
+                  <CardMedia component="img" sx={{ maxWidth: 130, maxHeight: 130, overflow: 'hidden' }} image={imageUrl} alt="default" />
                   <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                     <CardContent sx={{ flex: '1 0 auto', p: 1 }}>
                       <Typography component="div" variant="h6">
@@ -97,12 +104,12 @@ export default function Board() {
                 </Card>
               );
             })}
-            <div style={{ width: '100%', textAlign: 'center', padding: '20px 0' }}>페이징 예정 1 2 3</div>
           </div>
         ) : (
           <p>No Data</p>
         )}
 
+        <div style={{ width: '100%', textAlign: 'center', padding: '20px 0' }}>페이징 예정 1 2 3</div>
         {/* Bottom Navbar */}
         <Link to={'/post'}>
           <Fab
