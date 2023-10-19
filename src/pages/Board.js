@@ -6,13 +6,15 @@ import Navbar from 'components/Navbar';
 import BottomNav from 'components/BottomNav';
 import Fab from '@mui/material/Fab';
 import EditIcon from '@mui/icons-material/Edit';
-import { Box, Typography } from '@mui/material';
+import { Box, TextField, Typography } from '@mui/material';
 import 'styles/Board.css';
 import axios from 'axios';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import PageNumber from 'components/PageNumber';
+import InputAdornment from '@mui/material/InputAdornment';
+import SearchIcon from '@mui/icons-material/Search';
 
 export default function Board() {
   // const navigate = useNavigate();
@@ -20,6 +22,13 @@ export default function Board() {
   const getUserId = (id) => {
     setUserId(id);
   };
+
+  const [searchInput, setSearchInput] = useState();
+  const handleSearchInput = (e) => {
+    setSearchInput(e.target.value);
+    console.log(searchInput);
+  };
+  const [keyword, setKeyword] = useState();
 
   const [postList, setPostList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -39,6 +48,7 @@ export default function Board() {
       method: 'get',
       params: {
         page: pageNumber,
+        keyword: keyword,
       },
     })
       .then((response) => {
@@ -67,14 +77,36 @@ export default function Board() {
       .catch((error) => {
         alert(error);
       });
-  }, [pageNumber]);
+  }, [pageNumber, keyword]);
 
   return (
     <Background>
       <Navbar getUserId={getUserId} userId={userId} />
       {/* 등록된 아이템 리스트 보여주기 */}
+      <h3 style={{ margin: '20px 20px 0 20px' }}>등록된 거래 목록</h3>
       <div className="contentWrap">
-        <h3 style={{ marginTop: 0 }}>등록된 거래 목록</h3>
+        <TextField
+          fullWidth
+          variant="standard"
+          size="large"
+          placeholder="검색어를 입력하세요."
+          style={{ margin: '10px 0 10px 0' }}
+          onChange={handleSearchInput}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment
+                style={{ margin: '5px' }}
+                onClick={() => {
+                  setPageNumber(0);
+                  setKeyword(searchInput);
+                }}
+              >
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        ></TextField>
+
         {/* 이미지 접근 예시 */}
         {/* nginx proxy로 접근 */}
         {/* <img src='http://localhost:80/image/default.png' style={{width: '120px', marginBottom: '10px'}}/> */}
@@ -86,14 +118,14 @@ export default function Board() {
           <div style={{ flex: '1' }}>
             {postList.map((post, index) => {
               // index를 수정?
-              const imageUrl = 'http://localhost:80/image/' + post.image.uuid;
-              // const imageUrl = '/image/' + post.image.uuid; // 운영 환경의 url
+              // const imageUrl = 'http://localhost:80/image/' + post.image.uuid;
+              const imageUrl = '/image/' + post.image.uuid; // 운영 환경의 url
               return (
-                <Card key={index} sx={{ display: 'flex', margin: '10px 0', height: '130px' }}>
-                  <CardMedia component="img" sx={{ maxWidth: 130, maxHeight: 130, overflow: 'hidden' }} image={imageUrl} alt="default" />
-                  <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                <Card key={index} sx={{ display: 'flex', margin: '10px 0', height: '140px' }}>
+                  <CardMedia component="img" sx={{ maxWidth: 120, maxHeight: 140, objectFit: 'cover', overflow: 'hidden' }} image={imageUrl} alt="default" />
+                  <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', margin: '10px' }}>
                     <CardContent sx={{ flex: '1 0 auto', p: 1 }}>
-                      <Typography component="div" variant="h6">
+                      <Typography component="h4" variant="subtitle1">
                         {post.title}
                       </Typography>
                       <Typography variant="caption" color="text.secondary" component="div">
@@ -101,7 +133,7 @@ export default function Board() {
                       </Typography>
                     </CardContent>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1 }}>
-                      <Typography variant="h6">{post.price}원</Typography>
+                      <Typography variant="subtitle1">{post.price}원</Typography>
                       {post.status === 0 ? (
                         <Typography variant="overline" color={'green'} sx={{ border: 1, borderRadius: 1, textAlign: 'center', width: '60px', height: '30px' }}>
                           판매중
@@ -124,6 +156,7 @@ export default function Board() {
 
         <div style={{ width: '100%', textAlign: 'center', padding: '10px 0 20px 0' }}>
           <PageNumber page={page} setPageNumber={setPageNumber} />
+          {/* <TextField variant='standard' size='small'>검색</TextField> */}
         </div>
 
         {/* Bottom Navbar */}
