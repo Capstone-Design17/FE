@@ -12,6 +12,7 @@ import axios from 'axios';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
+import PageNumber from 'components/PageNumber';
 
 export default function Board() {
   // const navigate = useNavigate();
@@ -22,12 +23,23 @@ export default function Board() {
 
   const [postList, setPostList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState({
+    nowPage: '',
+    startPage: '',
+    endPage: '',
+    totalPage: '',
+  });
+  const [pageNumber, setPageNumber] = useState(0);
 
   // const getList = () => {
   useEffect(() => {
+    console.log('axios 호출');
     axios({
       url: 'api/board/getPostList',
       method: 'get',
+      params: {
+        page: pageNumber,
+      },
     })
       .then((response) => {
         console.log('Get List');
@@ -36,15 +48,16 @@ export default function Board() {
           // 로컬은 어떻게?
 
           // [postList, imageList]를 담은 리스트 생성
-          const post = response.data.postList;
+          const post = response.data.postList.content;
           const image = response.data.imageList;
+          const page = response.data.page;
           if (post && image && post.length === image.length) {
-            const mergedList = response.data.postList.map((postItem, index) => ({
+            const mergedList = response.data.postList.content.map((postItem, index) => ({
               ...postItem,
               image: image[index],
             }));
             setPostList(mergedList);
-            console.log(postList);
+            setPage(page);
           }
           setIsLoading(false);
         } else {
@@ -54,7 +67,7 @@ export default function Board() {
       .catch((error) => {
         alert(error);
       });
-  }, [isLoading]);
+  }, [pageNumber]);
 
   return (
     <Background>
@@ -73,10 +86,10 @@ export default function Board() {
           <div style={{ flex: '1' }}>
             {postList.map((post, index) => {
               // index를 수정?
-              // const imageUrl = 'http://localhost:80/image/' + post.image.uuid;
-              const imageUrl = '/image/' + post.image.uuid; // 운영 환경의 url
+              const imageUrl = 'http://localhost:80/image/' + post.image.uuid;
+              // const imageUrl = '/image/' + post.image.uuid; // 운영 환경의 url
               return (
-                <Card key={index} sx={{ display: 'flex', margin: '5px 0', height: '130px' }}>
+                <Card key={index} sx={{ display: 'flex', margin: '10px 0', height: '130px' }}>
                   <CardMedia component="img" sx={{ maxWidth: 130, maxHeight: 130, overflow: 'hidden' }} image={imageUrl} alt="default" />
                   <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                     <CardContent sx={{ flex: '1 0 auto', p: 1 }}>
@@ -109,7 +122,10 @@ export default function Board() {
           <p>No Data</p>
         )}
 
-        <div style={{ width: '100%', textAlign: 'center', padding: '20px 0' }}>페이징 예정 1 2 3</div>
+        <div style={{ width: '100%', textAlign: 'center', padding: '10px 0 20px 0' }}>
+          <PageNumber page={page} setPageNumber={setPageNumber} />
+        </div>
+
         {/* Bottom Navbar */}
         <Link to={'/post'}>
           <Fab
