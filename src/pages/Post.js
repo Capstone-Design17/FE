@@ -12,9 +12,6 @@ import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import InputAdornment from '@mui/material/InputAdornment';
 import Typography from '@mui/material/Typography';
-// import FormGroup from '@mui/material/FormGroup';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import Checkbox from '@mui/material/Checkbox';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import PopupDom from 'components/PopupDom';
@@ -113,6 +110,7 @@ export default function Post() {
       price: price,
       content: content,
       detailLocation: detailLocation,
+      status: 0,
     }),
   );
   for (const value of images.values()) {
