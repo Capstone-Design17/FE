@@ -15,9 +15,10 @@ import CardMedia from '@mui/material/CardMedia';
 import PageNumber from 'components/PageNumber';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
+import { useNavigate } from 'react-router-dom';
 
 export default function Board() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [userId, setUserId] = useState();
   const getUserId = (id) => {
     setUserId(id);
@@ -79,6 +80,10 @@ export default function Board() {
       });
   }, [pageNumber, keyword]);
 
+  const postDetail = () => {
+    navigate('/postDetail');
+  };
+
   return (
     <Background>
       <Navbar getUserId={getUserId} userId={userId} />
@@ -95,6 +100,7 @@ export default function Board() {
           InputProps={{
             endAdornment: (
               <InputAdornment
+                position="end"
                 style={{ margin: '5px' }}
                 onClick={() => {
                   setPageNumber(0);
@@ -118,33 +124,33 @@ export default function Board() {
           <div style={{ flex: '1' }}>
             {postList.map((post, index) => {
               // index를 수정?
-              // const imageUrl = 'http://localhost:80/image/' + post.image.uuid;
-              const imageUrl = '/image/' + post.image.uuid; // 운영 환경의 url
+              const imageUrl = 'http://localhost:80/image/' + post.image.uuid;
+              // const imageUrl = '/image/' + post.image.uuid; // 운영 환경의 url
               return (
-                <Card key={index} sx={{ display: 'flex', margin: '10px 0', height: '140px' }}>
+                <Card key={index} sx={{ display: 'flex', margin: '10px 0', height: '140px' }} onClick={postDetail}>
                   <CardMedia component="img" sx={{ maxWidth: 120, maxHeight: 140, objectFit: 'cover', overflow: 'hidden' }} image={imageUrl} alt="default" />
                   <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', margin: '10px' }}>
-                    <CardContent sx={{ flex: '1 0 auto', p: 1 }}>
+                    <CardContent sx={{ flex: '1 0 auto', p: 1 }} style={{ paddingBottom: '8px' }}>
                       <Typography component="h4" variant="subtitle1">
                         {post.title}
                       </Typography>
-                      <Typography variant="caption" color="text.secondary" component="div">
+                      <Typography variant="caption" color="text.secondary" component="div" style={{ height: '40px' }}>
                         {post.location}
                       </Typography>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} style={{ paddingTop: '10px' }}>
+                        <Typography variant="subtitle1">{post.price}원</Typography>
+                        {post.status === 0 ? (
+                          <Typography variant="overline" color={'green'} sx={{ border: 1, borderRadius: 1, textAlign: 'center', width: '60px', height: '30px' }}>
+                            판매중
+                            {/* post.status에 따라 다른 값 : 0 or 1? */}
+                          </Typography>
+                        ) : (
+                          <Typography variant="overline" color={'error'} sx={{ border: 1, borderRadius: 1, textAlign: 'center', width: '60px', height: '30px' }}>
+                            판매완료
+                          </Typography>
+                        )}
+                      </Box>
                     </CardContent>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1 }}>
-                      <Typography variant="subtitle1">{post.price}원</Typography>
-                      {post.status === 0 ? (
-                        <Typography variant="overline" color={'green'} sx={{ border: 1, borderRadius: 1, textAlign: 'center', width: '60px', height: '30px' }}>
-                          판매중
-                          {/* post.status에 따라 다른 값 : 0 or 1? */}
-                        </Typography>
-                      ) : (
-                        <Typography variant="overline" color={'error'} sx={{ border: 1, borderRadius: 1, textAlign: 'center', width: '60px', height: '30px' }}>
-                          판매완료
-                        </Typography>
-                      )}
-                    </Box>
                   </Box>
                 </Card>
               );
