@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import Background from 'components/Background';
 import Navbar from 'components/Navbar';
 import BottomNav from 'components/BottomNav';
-import Fab from '@mui/material/Fab';
 import EditIcon from '@mui/icons-material/Edit';
 import { Box, TextField, Typography } from '@mui/material';
 import 'styles/Board.css';
@@ -16,6 +15,14 @@ import PageNumber from 'components/PageNumber';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
+
+import SpeedDial from '@mui/material/SpeedDial';
+import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+import SpeedDialAction from '@mui/material/SpeedDialAction';
+import SaveIcon from '@mui/icons-material/Save';
+import PrintIcon from '@mui/icons-material/Print';
+import ShareIcon from '@mui/icons-material/Share';
+import CreateIcon from '@mui/icons-material/Create';
 
 export default function Board() {
   const navigate = useNavigate();
@@ -45,7 +52,7 @@ export default function Board() {
   useEffect(() => {
     console.log('axios 호출');
     axios({
-      url: 'api/board/getPostList',
+      url: '/api/board/getPostList',
       method: 'get',
       params: {
         page: pageNumber,
@@ -166,21 +173,41 @@ export default function Board() {
         </div>
 
         {/* Bottom Navbar */}
-        <Link to={'/post'}>
-          <Fab
-            color="error"
-            aria-label="edit"
-            style={{
-              position: 'fixed',
-              bottom: '8%', // Adjust the value as needed
-              right: '4%', // Adjust the value as needed
-            }}
-          >
-            <EditIcon />
-          </Fab>
-        </Link>
+        <SpeedDial
+          ariaLabel="SpeedDial basic example"
+          sx={{
+            position: 'absolute',
+            bottom: 70,
+            right: 20,
+            '& .MuiFab-primary': { backgroundColor: 'error.main' },
+            '&.MuiFab-root.MuiFab-primary .MuiSpeedDialIcon-root': {
+              color: 'error.main',
+            },
+          }}
+          icon={<SpeedDialIcon />}
+        >
+          {actions.map((action) => (
+            <SpeedDialAction key={action.name} icon={action.icon} tooltipTitle={action.name} />
+          ))}
+        </SpeedDial>
       </div>
       <BottomNav />
     </Background>
   );
 }
+
+const actions = [
+  {
+    icon: (
+      <Link to={'/post'} style={{ textDecoration: 'none', color: '#5f5f5f', display: 'flex' }}>
+        <EditIcon />
+      </Link>
+    ),
+    name: '글쓰기',
+  },
+  // 추후 목록 수정
+  { icon: <CreateIcon />, name: 'ds' },
+  { icon: <SaveIcon />, name: 'Save' },
+  { icon: <PrintIcon />, name: 'Print' },
+  { icon: <ShareIcon />, name: 'Share' },
+];
