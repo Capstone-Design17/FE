@@ -84,7 +84,9 @@ function Login() {
         {!pwValid && pw.length > 0 && <div className="errorMessageWrap">비밀번호는 영문, 숫자 특수문자를 포함한 8~20자입니다.</div>}
 
         <div className="linksWrap">
-          <Link to={'/signup'}>회원가입</Link>
+          <Link to={'/signup'} style={{ textDecoration: 'none', color: '#000000' }}>
+            회원가입
+          </Link>
           <span>|</span>
           <div>아이디 찾기</div>
           <span>|</span>

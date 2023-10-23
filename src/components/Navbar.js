@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AppBar } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -12,7 +12,7 @@ import Session from 'utils/Session';
 import { useState } from 'react';
 import Logout from 'components/Logout';
 
-export default function Navbar() {
+export default function Navbar(props) {
   const style = {
     position: 'absolute',
     top: '20%',
@@ -31,6 +31,12 @@ export default function Navbar() {
   const closeMenu = () => setOpen(false);
 
   const isSessionValid = Session();
+  useEffect(() => {
+    if (isSessionValid.id) {
+      props.getUserId(isSessionValid.id);
+    }
+  }, [isSessionValid, props]);
+
   // const logoutSession = logout();
 
   return (
