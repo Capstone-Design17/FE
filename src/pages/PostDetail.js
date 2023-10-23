@@ -14,8 +14,10 @@ import { useLocation } from 'react-router-dom';
 import createdAt from 'utils/Time';
 import Carousel from 'react-material-ui-carousel';
 import { Paper } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 export default function PostDetail() {
+  const navigate = useNavigate();
   const [userId, setUserId] = useState();
   const getUserId = (id) => {
     setUserId(id);
@@ -25,6 +27,8 @@ export default function PostDetail() {
 
   const [post, setPost] = useState([]);
   const [imageList, setImageList] = useState([]);
+  // const profileImgUrl = 'http://localhost:80/image/user.png';
+  const profileImgUrl = '/image/user.png'; // 실제 환경 Url
 
   // Session의 UserId가 Post의 UserId와 같으면 수정/삭제 버튼 생김
 
@@ -44,20 +48,17 @@ export default function PostDetail() {
         if (response.status === 200) {
           if (response.data.message === '게시글 불러오기 성공') {
             setPost(response.data.postDto);
-            console.log('이미지 리스트');
-            console.log(response.data.postDto);
-            console.log(response.data.imageList);
             setImageList(response.data.imageList);
           } else {
             throw new Error('게시글 불러오기 실패');
           }
         } else {
-          console.log(response);
           throw new Error('정의되지 않은 에러');
         }
       })
       .catch((error) => {
         alert(error);
+        navigate('/board');
       });
   }, []);
 
@@ -111,7 +112,8 @@ export default function PostDetail() {
             }}
           >
             {imageList.map((image, index) => {
-              const imageUrl = 'http://localhost:80/image/' + image.uuid;
+              // const imageUrl = 'http://localhost:80/image/' + image.uuid;
+              const imageUrl = '/image/' + image.uuid; // 실제 환경 Url
               return (
                 <Paper key={index}>
                   <img src={imageUrl} style={{ width: '100%', objectFit: 'cover' }} alt={`Image ${index}`} />
@@ -151,7 +153,7 @@ export default function PostDetail() {
             <Grid item marginTop={2}>
               <Typography variant="h5" fontWeight={'bold'}>
                 {/* 20,000원, 형태 수정 필요 */}
-                {post.price} 원
+                {post.price}원
               </Typography>
             </Grid>
           </Grid>
@@ -160,7 +162,7 @@ export default function PostDetail() {
           <Grid container direction="row" style={{ borderBottom: '1px solid #d3d3d3' }} p={2}>
             <Grid item xs={2} mr={2} style={{ display: 'flex' }}>
               {/* 프로필 사진 */}
-              <img src="http://localhost:80/image/test.png" style={{ maxWidth: '100%', maxHeight: '100%', margin: 'auto 0', objectFit: 'cover', borderRadius: '50%' }} />
+              <img src={profileImgUrl} style={{ maxWidth: '100%', maxHeight: '100%', margin: 'auto 0', objectFit: 'cover', borderRadius: '50%' }} />
             </Grid>
             <Grid container item direction="column" xs mt={1}>
               <Grid item>
@@ -185,9 +187,14 @@ export default function PostDetail() {
           </Grid>
 
           {/* Content */}
-          <Grid container p={3} style={{ borderBottom: '1px solid #d3d3d3' }}>
+          <Grid container p={2} style={{ borderBottom: '1px solid #d3d3d3' }}>
             <Grid item xs>
-              <Typography variant="body1">{post.content}</Typography>
+              <Typography variant="h6" fontWeight={'bold'} color={'text.secondary'} mb={1}>
+                상품내용
+              </Typography>
+              <Typography variant="body1" p={1} style={{ whiteSpace: 'pre-wrap' }}>
+                {post.content}
+              </Typography>
             </Grid>
           </Grid>
 

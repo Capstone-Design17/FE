@@ -123,7 +123,7 @@ export default function Board() {
 
         {/* 이미지 접근 예시 */}
         {/* nginx proxy로 접근 */}
-        {/* <img src='http://localhost:80/image/default.png' style={{width: '120px', marginBottom: '10px'}}/> */}
+        {/* <img src='/image/default.png' style={{width: '120px', marginBottom: '10px'}}/> */}
 
         {/* 반복 Card 구조*/}
         {isLoading ? (
@@ -132,8 +132,8 @@ export default function Board() {
           <div style={{ flex: '1' }}>
             {postList.map((post, index) => {
               // index를 수정?
-              const imageUrl = 'http://localhost:80/image/' + post.image.uuid;
-              // const imageUrl = '/image/' + post.image.uuid; // 운영 환경의 url
+              // const imageUrl = 'http://localhost:80/image/' + post.image.uuid;
+              const imageUrl = '/image/' + post.image.uuid; // 운영 환경의 url
               return (
                 <Card
                   key={index}
@@ -142,22 +142,22 @@ export default function Board() {
                     clickPost(post.postNum);
                   }}
                 >
-                  <CardMedia component="img" sx={{ maxWidth: 120, maxHeight: 140, objectFit: 'cover', overflow: 'hidden' }} image={imageUrl} alt="default" />
+                  <CardMedia component="img" sx={{ maxWidth: 120, minWidth: 120, maxHeight: 140, objectFit: 'cover', overflow: 'hidden' }} image={imageUrl} alt="default" />
                   <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', margin: '10px' }}>
                     <CardContent sx={{ flex: '1 0 auto', p: 1 }} style={{ paddingBottom: '8px' }}>
                       <Grid container item xs direction="row" p={0} m={0}>
-                        <Grid item pr={1} xs={10}>
-                          <Typography component="h4" variant="subtitle1">
+                        <Grid item pr={1} xs>
+                          <Typography component="h4" variant="subtitle1" style={{ maxWidth: '160px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {post.title}
                           </Typography>
                         </Grid>
-                        <Grid item xs>
-                          <Typography variant="caption" color="text.secondary" component="div">
+                        <Grid item>
+                          <Typography variant="caption" color="text.secondary" component="div" style={{ minWidth: '37px' }}>
                             {createdAt(post.createAt)}
                           </Typography>
                         </Grid>
                       </Grid>
-                      <Typography variant="caption" color="text.secondary" component="div" style={{ height: '40px' }}>
+                      <Typography variant="caption" color="text.secondary" component="div" style={{ height: '40px', maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {post.location}
                       </Typography>
 
@@ -166,7 +166,7 @@ export default function Board() {
                         {post.status === 0 ? (
                           <Typography variant="overline" color={'green'} sx={{ border: 1, borderRadius: 1, textAlign: 'center', width: '60px', height: '30px' }}>
                             판매중
-                            {/* post.status에 따라 다른 값 : 0 or 1? */}
+                            {/* post.status에 따라 다른 값 : 판매중(0), 예약중(1), 판매완료(2), 삭제된(3) */}
                           </Typography>
                         ) : (
                           <Typography variant="overline" color={'error'} sx={{ border: 1, borderRadius: 1, textAlign: 'center', width: '60px', height: '30px' }}>
