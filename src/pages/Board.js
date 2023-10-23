@@ -64,7 +64,6 @@ export default function Board() {
         console.log('Get List');
         console.log(response);
         if (response.status === 200) {
-
           // [postList, imageList]를 담은 리스트 생성
           const post = response.data.postList.content;
           const image = response.data.imageList;
