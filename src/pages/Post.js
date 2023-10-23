@@ -226,7 +226,7 @@ export default function Post() {
             {!isContentValid && content.length > 0 && <div className="errorMessageWrap">최대 500자 입력 가능합니다.</div>}
           </div>
 
-          {/* 지역: 도로명주소? API? */}
+          {/* 도로명주소 API */}
           <div>
             <Button onClick={openPostCode} style={{ marginTop: '20px' }}>
               우편번호 검색
@@ -237,7 +237,6 @@ export default function Post() {
                   <PopupPostCode onClose={closePostCode} setLocation={setLocation} location={location} onChange={handleInput} />
                 </PopupDom>
               )}
-              {/* {location} */}
             </div>
           </div>
 
