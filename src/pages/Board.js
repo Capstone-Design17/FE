@@ -15,7 +15,7 @@ import PageNumber from 'components/PageNumber';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
-
+import createdAt from 'utils/Time';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
@@ -23,6 +23,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import PrintIcon from '@mui/icons-material/Print';
 import ShareIcon from '@mui/icons-material/Share';
 import CreateIcon from '@mui/icons-material/Create';
+import Grid from '@mui/material/Grid';
 
 export default function Board() {
   const navigate = useNavigate();
@@ -87,8 +88,8 @@ export default function Board() {
       });
   }, [pageNumber, keyword]);
 
-  const postDetail = () => {
-    navigate('/postDetail');
+  const clickPost = (postNumber) => {
+    navigate('/postDetail', { state: postNumber });
   };
 
   return (
@@ -134,16 +135,32 @@ export default function Board() {
               const imageUrl = 'http://localhost:80/image/' + post.image.uuid;
               // const imageUrl = '/image/' + post.image.uuid; // 운영 환경의 url
               return (
-                <Card key={index} sx={{ display: 'flex', margin: '10px 0', height: '140px' }} onClick={postDetail}>
+                <Card
+                  key={index}
+                  sx={{ display: 'flex', margin: '10px 0', height: '140px' }}
+                  onClick={() => {
+                    clickPost(post.postNum);
+                  }}
+                >
                   <CardMedia component="img" sx={{ maxWidth: 120, maxHeight: 140, objectFit: 'cover', overflow: 'hidden' }} image={imageUrl} alt="default" />
                   <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', margin: '10px' }}>
                     <CardContent sx={{ flex: '1 0 auto', p: 1 }} style={{ paddingBottom: '8px' }}>
-                      <Typography component="h4" variant="subtitle1">
-                        {post.title}
-                      </Typography>
+                      <Grid container item xs direction="row" p={0} m={0}>
+                        <Grid item pr={1} xs={10}>
+                          <Typography component="h4" variant="subtitle1">
+                            {post.title}
+                          </Typography>
+                        </Grid>
+                        <Grid item xs>
+                          <Typography variant="caption" color="text.secondary" component="div">
+                            {createdAt(post.createAt)}
+                          </Typography>
+                        </Grid>
+                      </Grid>
                       <Typography variant="caption" color="text.secondary" component="div" style={{ height: '40px' }}>
                         {post.location}
                       </Typography>
+
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} style={{ paddingTop: '10px' }}>
                         <Typography variant="subtitle1">{post.price}원</Typography>
                         {post.status === 0 ? (
@@ -179,9 +196,8 @@ export default function Board() {
             position: 'absolute',
             bottom: 70,
             right: 20,
-            '& .MuiFab-primary': { backgroundColor: 'error.main' },
-            '&.MuiFab-root.MuiFab-primary .MuiSpeedDialIcon-root': {
-              color: 'error.main',
+            '& .MuiFab-root.MuiFab-primary': {
+              backgroundColor: 'error.main',
             },
           }}
           icon={<SpeedDialIcon />}
