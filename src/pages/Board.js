@@ -64,8 +64,6 @@ export default function Board() {
         console.log('Get List');
         console.log(response);
         if (response.status === 200) {
-          // 로컬은 어떻게?
-
           // [postList, imageList]를 담은 리스트 생성
           const post = response.data.postList.content;
           const image = response.data.imageList;
@@ -131,7 +129,6 @@ export default function Board() {
         ) : postList.length > 0 ? (
           <div style={{ flex: '1' }}>
             {postList.map((post, index) => {
-              // index를 수정?
               // const imageUrl = 'http://localhost:80/image/' + post.image.uuid;
               const imageUrl = '/image/' + post.image.uuid; // 운영 환경의 url
               return (
@@ -186,7 +183,6 @@ export default function Board() {
 
         <div style={{ width: '100%', textAlign: 'center', padding: '10px 0 20px 0' }}>
           <PageNumber page={page} setPageNumber={setPageNumber} />
-          {/* <TextField variant='standard' size='small'>검색</TextField> */}
         </div>
 
         {/* Bottom Navbar */}

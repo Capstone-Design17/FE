@@ -55,7 +55,6 @@ export const isPrice = (price) => {
 };
 
 export const isContent = (content) => {
-  // const contentRegex = new RegExp('^.{1,500}$');
   const contentRegex = new RegExp('^(.|\\n){1,500}$');
   return contentRegex.test(content);
 };
