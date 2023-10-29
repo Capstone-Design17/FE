@@ -27,8 +27,8 @@ export default function PostDetail() {
 
   const [post, setPost] = useState([]);
   const [imageList, setImageList] = useState([]);
-  // const profileImgUrl = 'http://localhost:80/image/user.png';
-  const profileImgUrl = '/image/user.png'; // 실제 환경 Url
+  const profileImgUrl = 'http://localhost:80/image/user.png';
+  // const profileImgUrl = '/image/user.png'; // 실제 환경 Url
 
   // Session의 UserId가 Post의 UserId와 같으면 수정/삭제 버튼 생김
 
@@ -61,6 +61,11 @@ export default function PostDetail() {
         navigate('/board');
       });
   }, []);
+
+  const clickChat = (postNumber) => {
+    console.log(postNumber);
+    navigate('/chatting', { state: postNumber });
+  };
 
   return (
     <Background>
@@ -112,8 +117,8 @@ export default function PostDetail() {
             }}
           >
             {imageList.map((image, index) => {
-              // const imageUrl = 'http://localhost:80/image/' + image.uuid;
-              const imageUrl = '/image/' + image.uuid; // 실제 환경 Url
+              const imageUrl = 'http://localhost:80/image/' + image.uuid;
+              // const imageUrl = '/image/' + image.uuid; // 실제 환경 Url
               return (
                 <Paper key={index}>
                   <img src={imageUrl} style={{ width: '100%', objectFit: 'cover' }} alt={`Image ${index}`} />
@@ -234,7 +239,13 @@ export default function PostDetail() {
           </Typography>
         </Grid>
         <Grid item xs={6} sx={{ backgroundColor: 'error.light', color: 'white' }} p={1}>
-          <Typography variant="h6" fontWeight={'bold'}>
+          <Typography
+            variant="h6"
+            fontWeight={'bold'}
+            onClick={() => {
+              clickChat(post.postNum);
+            }}
+          >
             채팅하기
             {/* Link */}
           </Typography>
