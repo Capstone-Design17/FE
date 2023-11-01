@@ -79,7 +79,19 @@ function Login() {
 
         <div className="inputTitle">비밀번호</div>
         <div className="inputWrap">
-          <input className="input" type="password" placeholder="영문, 숫자, 특수문자 포함(8~20자)" value={pw} onChange={handlePw} /> <br />
+          <input
+            className="input"
+            type="password"
+            placeholder="영문, 숫자, 특수문자 포함(8~20자)"
+            value={pw}
+            onChange={handlePw}
+            onKeyDown={(ev) => {
+              if (ev.key === 'Enter') {
+                login();
+              }
+            }}
+          />{' '}
+          <br />
         </div>
         {!pwValid && pw.length > 0 && <div className="errorMessageWrap">비밀번호는 영문, 숫자 특수문자를 포함한 8~20자입니다.</div>}
 

@@ -3,7 +3,7 @@ import Background from 'components/Background';
 import Navbar from 'components/Navbar';
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 // import SockJS from "sockjs-client";
 import { Stomp } from '@stomp/stompjs';
@@ -18,6 +18,7 @@ export default function Chatting() {
   // session의 userId와 post의 postNum, sellerId로 채팅방 호출
   // WebSocket을 이용한 데이터 통신
 
+  const navigate = useNavigate();
   const { state } = useLocation();
   const [userId, setUserId] = useState();
   const getUserId = (id) => {
@@ -28,6 +29,10 @@ export default function Chatting() {
   const [message, setMessage] = useState(''); // 실시간으로 전송할 메시지
   const handleMessage = (e) => {
     setMessage(e.target.value);
+  };
+
+  const backToPost = (postNumber) => {
+    navigate('/postDetail', { state: postNumber });
   };
 
   const stompClient = useRef({});
@@ -50,7 +55,9 @@ export default function Chatting() {
         // 채팅 내역에 메시지 추가
         console.log('받은 메시지: ' + newMessage.sender + '-' + newMessage.message);
         setChat((prevChat) => [...prevChat, newMessage]);
-        console.log(chat);
+        chat.map((message) => {
+          console.log(message);
+        });
       });
     });
   };
@@ -120,18 +127,26 @@ export default function Chatting() {
     <Background>
       <Navbar getUserId={getUserId} userId={userId} />
       <Grid container style={{ backgroundColor: '#e7e7e7', height: '100px' }} p={1}>
-        <Grid item xs>
-          {/* <Link to={'/chat/list'} style={{ textDecoration: 'none', color: 'white' }}> */}
-          <ArrowBackIcon />
-          {/* </Link> */}
+        <Grid item xs={1}>
+          {/* PostDetail로 돌아가기 or 채팅 리스트로 돌아가기? */}
+          <ArrowBackIcon
+            onClick={() => {
+              backToPost(state);
+            }}
+            style={{ color: 'white' }}
+          />
         </Grid>
-        <Grid item>
-          {/* <FavoriteBorderIcon style={{ color: 'white' }} /> */}
-          <img src={profileImgUrl} style={{ maxWidth: '50px', maxHeight: '50px', objectFit: 'cover', borderRadius: '50%' }} />
-          판매자 ID Post 정보
-          <div></div>
+        <Grid item xs container direction={'column'}>
+          {/* PostDetail 관련 정보 띄우기 */}
+          <Grid item>
+            {/* Avatar? */}
+            <img src={profileImgUrl} style={{ maxWidth: '50px', maxHeight: '50px', objectFit: 'cover', borderRadius: '50%' }} />
+          </Grid>
+          <Grid item>판매자 ID</Grid>
+          <Grid item>Post 정보</Grid>
         </Grid>
       </Grid>
+
       <div className="chattingWrap" style={{ backgroundColor: '', overflowY: 'scroll', padding: '20px', flex: '1' }}>
         {/* 기존 채팅 내역 */}
         {/* 입장한 기준으로 채팅 내역 불러와서 표시해주기 */}
@@ -143,20 +158,59 @@ export default function Chatting() {
         {chat.length > 0 ? (
           <div>
             {chat.map((message, index) => {
+              // 시간
               let displayTime = true;
               const createdAt = getTimeString(message.createdAt);
+
+              // 날짜
+              let displayDate = false;
+              let today = '';
 
               if (index !== chat.length - 1) {
                 // 마지막 인덱스가 아닐 때만 실행.
                 const nextSender = chat[index + 1].sender;
-                console.log(nextSender);
 
                 // 같은 사람이 보낸 메시지면
+                const nextCreatedAt = getTimeString(chat[index + 1].createdAt);
                 if (nextSender === message.sender) {
-                  const nextCreatedAt = getTimeString(chat[index + 1].createdAt);
-
                   // 보낸 시간이 같은 경우
                   if (nextCreatedAt === createdAt) displayTime = false;
+                }
+
+                // 보낸 날짜가 다른 경우
+                const date = new Date(message.createdAt).getDate(); // 이 메시지
+                const nextCreatedDate = new Date(chat[index + 1].createdAt); // 다음 메시지
+
+                if (nextCreatedDate.getDate() !== date) {
+                  displayDate = true;
+
+                  let day = '';
+                  switch (nextCreatedDate.getDay()) {
+                    case 0:
+                      day = '일';
+                      break;
+                    case 1:
+                      day = '월';
+                      break;
+                    case 2:
+                      day = '화';
+                      break;
+                    case 3:
+                      day = '수';
+                      break;
+                    case 4:
+                      day = '목';
+                      break;
+                    case 5:
+                      day = '금';
+                      break;
+                    case 6:
+                      day = '토';
+                      break;
+                    default:
+                      break;
+                  }
+                  today = `${nextCreatedDate.getMonth() + 1}월 ${nextCreatedDate.getDate()}일 ${day}요일`;
                 }
               }
 
@@ -180,6 +234,14 @@ export default function Chatting() {
                         {displayTime ? <Typography variant="caption">{createdAt}</Typography> : null}
                       </Grid>
                     </Grid>
+                    {/* 날짜가 바뀌면 출력 */}
+                    {displayDate ? (
+                      <div style={{ display: 'flex', justifyContent: 'center', margin: '20px' }}>
+                        <Typography variant="caption" style={{ width: '100px', textAlign: 'center', backgroundColor: '#D3D3D3', color: 'white', borderRadius: '20px', padding: '3px 5px' }}>
+                          {today}
+                        </Typography>
+                      </div>
+                    ) : null}
                   </div>
                 );
               } else {
@@ -201,6 +263,13 @@ export default function Chatting() {
                         </Grid>
                       </Grid>
                     </Grid>
+                    {displayDate ? (
+                      <div style={{ display: 'flex', justifyContent: 'center', margin: '20px' }}>
+                        <Typography variant="caption" style={{ width: '100px', textAlign: 'center', backgroundColor: '#D3D3D3', color: 'white', borderRadius: '20px', padding: '3px 5px' }}>
+                          {today}
+                        </Typography>
+                      </div>
+                    ) : null}
                   </div>
                 );
               }
@@ -209,15 +278,16 @@ export default function Chatting() {
         ) : (
           <div></div>
         )}
-
       </div>
 
       {/* Message 전송 */}
-      <Grid container style={{ position: '', bottom: 0 }} p={2}>
+      <Grid container style={{ position: '', bottom: 0, borderTop: '1px solid #D3D3D3' }} p={2}>
         <Grid item xs mr={1}>
           {/* 입력할 메시지 입력, state로 관리 */}
           <TextField
+            placeholder="메시지를 입력하세요."
             size="small"
+            color="error"
             onKeyDown={(ev) => {
               if (ev.key === 'Enter') {
                 publish();

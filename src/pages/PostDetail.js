@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid';
 import { Link } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { Typography } from '@mui/material';
+import { Avatar, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
@@ -167,7 +167,9 @@ export default function PostDetail() {
           <Grid container direction="row" style={{ borderBottom: '1px solid #d3d3d3' }} p={2}>
             <Grid item xs={2} mr={2} style={{ display: 'flex' }}>
               {/* 프로필 사진 */}
-              <img src={profileImgUrl} style={{ maxWidth: '100%', maxHeight: '100%', margin: 'auto 0', objectFit: 'cover', borderRadius: '50%' }} />
+              {/* <Avatar */}
+
+              <Avatar alt="" src={profileImgUrl} sx={{ width: 56, height: 56 }} />
             </Grid>
             <Grid container item direction="column" xs mt={1}>
               <Grid item>
