@@ -62,9 +62,11 @@ export default function PostDetail() {
       });
   }, []);
 
-  const clickChat = (postNumber, sellerId) => {
+  const clickChat = (postNumber, sellerId, title, price, image) => {
     console.log(postNumber);
-    navigate('/chatting', { state: { postNum: postNumber, sellerId: sellerId } });
+    const thumbnail = 'http://localhost:80/image/' + image.uuid;
+    // const thumbnail = '/image/' + image.uuid; // 실제 환경 Url
+    navigate('/chatting', { state: { postNum: postNumber, sellerId: sellerId, title: title, price: price, image: thumbnail } });
   };
 
   return (
@@ -246,7 +248,7 @@ export default function PostDetail() {
             variant="h6"
             fontWeight={'bold'}
             onClick={() => {
-              clickChat(post.postNum, post.userId);
+              clickChat(post.postNum, post.userId, post.title, post.price, imageList[0]);
             }}
           >
             채팅하기

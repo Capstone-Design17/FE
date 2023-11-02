@@ -8,11 +8,13 @@ import Grid from '@mui/material/Grid';
 // import SockJS from "sockjs-client";
 import { Stomp } from '@stomp/stompjs';
 import Typography from '@mui/material/Typography';
+import Avatar from '@mui/material/Avatar';
 import { useRef } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 export default function Chatting() {
   // 채팅하기 버튼을 통해 접근
@@ -170,7 +172,7 @@ export default function Chatting() {
     setMessage(''); // 메시지 보내는 칸 초기화
   };
 
-  const profileImgUrl = 'http://localhost:80/image/user.png';
+  // const profileImgUrl = 'http://localhost:80/image/user.png';
   // const profileImgUrl = '/image/user.png'; // 실제 환경 Url
 
   const getTimeString = (createdAt) => {
@@ -188,32 +190,60 @@ export default function Chatting() {
 
   return (
     <Background>
-      <Navbar getUserId={getUserId} userId={userId} />
-      <Grid container style={{ backgroundColor: '#e7e7e7', height: '100px' }} p={1}>
-        <Grid item xs={1}>
-          {/* 채팅 리스트로 돌아가기 */}
-          <Link to="/chatList">
-            <ArrowBackIcon />
-          </Link>
+      <div style={{ display: 'none' }}>
+        <Navbar getUserId={getUserId} userId={userId} />
+      </div>
+      <Grid container p={2}>
+        <Grid container item alignItems={'center'} pb={1} borderBottom={'1px solid #dfdfdf'}>
+          <Grid item xs={1}>
+            {/* 채팅 리스트로 돌아가기 */}
+            <Link to="/chatList" style={{ color: 'black' }}>
+              <ArrowBackIcon />
+            </Link>
+          </Grid>
+          <Grid item xs>
+            <Typography variant="h6" fontWeight={'bold'}>
+              {state.sellerId}
+            </Typography>
+          </Grid>
+          <Grid item>
+            {/* 채팅방 나가기 */}
+            <MoreVertIcon />
+          </Grid>
         </Grid>
-        <Grid item xs container direction={'column'}>
+        <Grid item xs container display={'flex'} alignItems={'center'} justifyContent={'center'} borderBottom={'1px solid #dfdfdf'} pt={2} pb={2}>
           {/* PostDetail 관련 정보 띄우기 */}
+          {/* Axios를 또 호출? or State로 받음? */}
+          {/* State로 받기가 좋아보이나 채팅 목록에서 받는건 힘들어보이기도.. */}
+          <Grid item style={{ color: 'white' }} mr={2}>
+            {/* Avatar? */}
+            {/* <img src={profileImgUrl} style={{ maxWidth: '50px', maxHeight: '50px', objectFit: 'cover'}} /> */}
+            <Avatar src={state.image} sx={{ width: 56, height: 56 }} />
+          </Grid>
           <Grid
+            container
             item
+            xs
+            direction={'column'}
             onClick={() => {
               backToPost(state.postNum);
             }}
-            style={{ color: 'white' }}
           >
-            {/* Avatar? */}
-            <img src={profileImgUrl} style={{ maxWidth: '50px', maxHeight: '50px', objectFit: 'cover', borderRadius: '50%' }} />
+            <Grid item>
+              <Typography variant="subtitle1" fontWeight={'bold'} color={'text.secondary'}>
+                {state.title}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography variant="body2" color={'text.secondary'} fontWeight={'bold'}>
+                {state.price}원
+              </Typography>
+            </Grid>
           </Grid>
-          <Grid item>판매자 ID</Grid>
-          <Grid item>Post 정보</Grid>
         </Grid>
       </Grid>
 
-      <div className="chattingWrap" style={{ backgroundColor: '', overflowY: 'scroll', padding: '20px', flex: '1' }}>
+      <div className="chattingWrap" style={{ overflowY: 'scroll', padding: '20px', flex: '1' }}>
         {/* 기존 채팅 내역 */}
         {/* 입장한 기준으로 채팅 내역 불러와서 표시해주기 */}
 
@@ -295,7 +325,11 @@ export default function Chatting() {
                       </Grid>
                       {/* 시간 분 단위로 묶어서 출력 */}
                       <Grid item display={'flex'} flexDirection={'column'} justifyContent={'flex-end'} pl={1}>
-                        {displayTime ? <Typography variant="caption">{createdAt}</Typography> : null}
+                        {displayTime ? (
+                          <Typography variant="caption" fontWeight={'600'} color={'text.secondary'}>
+                            {createdAt}
+                          </Typography>
+                        ) : null}
                       </Grid>
                     </Grid>
                     {/* 날짜가 바뀌면 출력 */}
@@ -320,7 +354,7 @@ export default function Chatting() {
                         </Grid>
                         <Grid item display={'flex'} flexDirection={'column'} justifyContent={'flex-end'}>
                           {displayTime ? (
-                            <Typography variant="caption" component="div" textAlign={'right'} pr={1}>
+                            <Typography variant="caption" textAlign={'right'} pr={1} color={'text.secondary'} fontWeight={'bold'}>
                               {createdAt}
                             </Typography>
                           ) : null}
