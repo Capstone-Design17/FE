@@ -64,7 +64,7 @@ export default function PostDetail() {
 
   const clickChat = (postNumber, sellerId) => {
     console.log(postNumber);
-    navigate('/chatting', { state: {postNum:postNumber, sellerId:sellerId} });
+    navigate('/chatting', { state: { postNum: postNumber, sellerId: sellerId } });
   };
 
   return (
@@ -241,6 +241,7 @@ export default function PostDetail() {
           </Typography>
         </Grid>
         <Grid item xs={6} sx={{ backgroundColor: 'error.light', color: 'white' }} p={1}>
+          {/* UserId가 SellerId면 Disabled 시키기 */}
           <Typography
             variant="h6"
             fontWeight={'bold'}

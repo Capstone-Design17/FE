@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import { useRef } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 export default function Chatting() {
@@ -40,36 +40,60 @@ export default function Chatting() {
   const [roomId, setRoomId] = useState('');
   // RoomId를 받아옴
   useEffect(() => {
-    if(userId !== '' ) {
-
+    if (userId !== '') {
       console.log('RoomId 호출');
       axios({
-      url:'/api/chat/room',
-      method:'post',
-      data: {
-        sellerId: state.sellerId,
-        userId: userId,
-        postNum: state.postNum,
-      }
-    })
-    .then((response) => {
-      console.log(response.data);
-      if(response.status === 200) {
-        if(response.data.message === "채팅방 불러오기 성공") {
-          setRoomId(response.data.roomDto.roomId);
-        }
-        else{
-          alert('접속 실패 : ' + response.data.message);
-          navigate('/ChatList');
-        }
-      }
-      else {
-        throw new Error("정의되지 않은 에러");
-      }
-    })
-    .catch((error)=> alert(error));
+        url: '/api/chat/room',
+        method: 'post',
+        data: {
+          sellerId: state.sellerId,
+          userId: userId,
+          postNum: state.postNum,
+        },
+      })
+        .then((response) => {
+          console.log(response.data);
+          if (response.status === 200) {
+            if (response.data.message === '채팅방 불러오기 성공') {
+              setRoomId(response.data.roomDto.roomId);
+            } else {
+              alert('접속 실패 : ' + response.data.message);
+              navigate('/ChatList');
+            }
+          } else {
+            throw new Error('정의되지 않은 에러');
+          }
+        })
+        .catch((error) => alert(error));
     }
   }, [userId]);
+
+  useEffect(() => {
+    if (roomId != '') {
+      console.log('roomId:' + roomId);
+      axios({
+        url: '/api/chat/room',
+        method: 'get',
+        params: {
+          roomId: roomId,
+        },
+      })
+        .then((response) => {
+          console.log(response.data);
+          if (response.status === 200) {
+            if (response.data.message === '채팅 내역 조회 성공') {
+              setChat([...response.data.chatList]);
+            } else {
+              alert(response.data.message);
+              navigate('/ChatList');
+            }
+          } else {
+            throw new Error('정의되지 않은 에러');
+          }
+        })
+        .catch((error) => alert(error));
+    }
+  }, [roomId]);
 
   const stompClient = useRef({});
 
@@ -104,10 +128,9 @@ export default function Chatting() {
   };
 
   useEffect(() => {
-    if(roomId !== '') {
-
+    if (roomId !== '') {
       connect();
-      
+
       return () => disconnect();
     }
   }, [roomId]);
@@ -169,16 +192,19 @@ export default function Chatting() {
       <Grid container style={{ backgroundColor: '#e7e7e7', height: '100px' }} p={1}>
         <Grid item xs={1}>
           {/* 채팅 리스트로 돌아가기 */}
-          <Link to='/chatList'>
-            <ArrowBackIcon/>
+          <Link to="/chatList">
+            <ArrowBackIcon />
           </Link>
         </Grid>
         <Grid item xs container direction={'column'}>
           {/* PostDetail 관련 정보 띄우기 */}
-          <Grid item onClick={() => {
+          <Grid
+            item
+            onClick={() => {
               backToPost(state.postNum);
             }}
-            style={{ color: 'white' }}>
+            style={{ color: 'white' }}
+          >
             {/* Avatar? */}
             <img src={profileImgUrl} style={{ maxWidth: '50px', maxHeight: '50px', objectFit: 'cover', borderRadius: '50%' }} />
           </Grid>
@@ -190,8 +216,6 @@ export default function Chatting() {
       <div className="chattingWrap" style={{ backgroundColor: '', overflowY: 'scroll', padding: '20px', flex: '1' }}>
         {/* 기존 채팅 내역 */}
         {/* 입장한 기준으로 채팅 내역 불러와서 표시해주기 */}
-        <div>History</div>
-        {/* .map() */}
 
         {/* sender === userId면 오른쪽, 아니면 왼쪽 */}
         {/* 각각 Style이 달라야 함 */}
