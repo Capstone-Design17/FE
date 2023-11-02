@@ -62,9 +62,9 @@ export default function PostDetail() {
       });
   }, []);
 
-  const clickChat = (postNumber) => {
+  const clickChat = (postNumber, sellerId) => {
     console.log(postNumber);
-    navigate('/chatting', { state: postNumber });
+    navigate('/chatting', { state: {postNum:postNumber, sellerId:sellerId} });
   };
 
   return (
@@ -245,7 +245,7 @@ export default function PostDetail() {
             variant="h6"
             fontWeight={'bold'}
             onClick={() => {
-              clickChat(post.postNum);
+              clickChat(post.postNum, post.userId);
             }}
           >
             채팅하기

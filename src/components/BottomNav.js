@@ -19,9 +19,9 @@ export default function SimpleBottomNavigation() {
         }}
       >
         {/* 내용 수정 필요 */}
-        <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-        <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-        <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+        <BottomNavigationAction label="홈" icon={<RestoreIcon />} />
+        <BottomNavigationAction label="채팅" icon={<FavoriteIcon />} />
+        <BottomNavigationAction label="마이페이지" icon={<LocationOnIcon />} />
       </BottomNavigation>
     </Box>
   );

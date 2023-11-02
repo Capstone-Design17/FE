@@ -11,6 +11,8 @@ import Typography from '@mui/material/Typography';
 import { useRef } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import {Link} from 'react-router-dom';
+import axios from 'axios';
 
 export default function Chatting() {
   // 채팅하기 버튼을 통해 접근
@@ -20,7 +22,7 @@ export default function Chatting() {
 
   const navigate = useNavigate();
   const { state } = useLocation();
-  const [userId, setUserId] = useState();
+  const [userId, setUserId] = useState('');
   const getUserId = (id) => {
     setUserId(id);
   };
@@ -35,10 +37,45 @@ export default function Chatting() {
     navigate('/postDetail', { state: postNumber });
   };
 
+  const [roomId, setRoomId] = useState('');
+  // RoomId를 받아옴
+  useEffect(() => {
+    if(userId !== '' ) {
+
+      console.log('RoomId 호출');
+      axios({
+      url:'/api/chat/room',
+      method:'post',
+      data: {
+        sellerId: state.sellerId,
+        userId: userId,
+        postNum: state.postNum,
+      }
+    })
+    .then((response) => {
+      console.log(response.data);
+      if(response.status === 200) {
+        if(response.data.message === "채팅방 불러오기 성공") {
+          setRoomId(response.data.roomDto.roomId);
+        }
+        else{
+          alert('접속 실패 : ' + response.data.message);
+          navigate('/ChatList');
+        }
+      }
+      else {
+        throw new Error("정의되지 않은 에러");
+      }
+    })
+    .catch((error)=> alert(error));
+    }
+  }, [userId]);
+
   const stompClient = useRef({});
 
   const connect = () => {
-    console.log('Chatting Room: ' + state);
+    console.log('Chatting Room: ' + state.postNum); // postNum은 roomId가 아님
+    console.log('Chatting Room: ' + roomId); // postNum은 roomId가 아님
     // WebSocket
     stompClient.current = Stomp.over(() => new WebSocket('ws://localhost:8080/api/ws')); // Stomp Client
 
@@ -50,7 +87,7 @@ export default function Chatting() {
       // Subscribe
       // RoomId 동적으로
       // url 서버에 맞게
-      stompClient.current.subscribe('/topic/chat/' + state, (data) => {
+      stompClient.current.subscribe('/topic/chat/' + roomId, (data) => {
         const newMessage = JSON.parse(data.body);
         // 채팅 내역에 메시지 추가
         console.log('받은 메시지: ' + newMessage.sender + '-' + newMessage.message);
@@ -67,10 +104,13 @@ export default function Chatting() {
   };
 
   useEffect(() => {
-    connect();
+    if(roomId !== '') {
 
-    return () => disconnect();
-  }, []);
+      connect();
+      
+      return () => disconnect();
+    }
+  }, [roomId]);
 
   // Publish
   const publish = () => {
@@ -98,7 +138,7 @@ export default function Chatting() {
       '/app/chat',
       {},
       JSON.stringify({
-        roomNum: state,
+        roomId: roomId,
         sender: userId,
         message: message,
       }),
@@ -128,17 +168,17 @@ export default function Chatting() {
       <Navbar getUserId={getUserId} userId={userId} />
       <Grid container style={{ backgroundColor: '#e7e7e7', height: '100px' }} p={1}>
         <Grid item xs={1}>
-          {/* PostDetail로 돌아가기 or 채팅 리스트로 돌아가기? */}
-          <ArrowBackIcon
-            onClick={() => {
-              backToPost(state);
-            }}
-            style={{ color: 'white' }}
-          />
+          {/* 채팅 리스트로 돌아가기 */}
+          <Link to='/chatList'>
+            <ArrowBackIcon/>
+          </Link>
         </Grid>
         <Grid item xs container direction={'column'}>
           {/* PostDetail 관련 정보 띄우기 */}
-          <Grid item>
+          <Grid item onClick={() => {
+              backToPost(state.postNum);
+            }}
+            style={{ color: 'white' }}>
             {/* Avatar? */}
             <img src={profileImgUrl} style={{ maxWidth: '50px', maxHeight: '50px', objectFit: 'cover', borderRadius: '50%' }} />
           </Grid>
