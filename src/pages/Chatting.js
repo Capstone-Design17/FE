@@ -211,7 +211,7 @@ export default function Chatting() {
             <MoreVertIcon />
           </Grid>
         </Grid>
-        <Grid item xs container display={'flex'} alignItems={'center'} justifyContent={'center'} borderBottom={'1px solid #dfdfdf'} pt={2} pb={2}>
+        <Grid item xs container display={'flex'} alignItems={'center'} justifyContent={'center'} borderBottom={'1px solid #dfdfdf'} pl={1} pr={1} pt={2} pb={2}>
           {/* PostDetail 관련 정보 띄우기 */}
           {/* Axios를 또 호출? or State로 받음? */}
           {/* State로 받기가 좋아보이나 채팅 목록에서 받는건 힘들어보이기도.. */}

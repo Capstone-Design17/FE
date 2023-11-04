@@ -244,16 +244,21 @@ export default function PostDetail() {
         </Grid>
         <Grid item xs={6} sx={{ backgroundColor: 'error.light', color: 'white' }} p={1}>
           {/* UserId가 SellerId면 Disabled 시키기 */}
-          <Typography
-            variant="h6"
-            fontWeight={'bold'}
-            onClick={() => {
-              clickChat(post.postNum, post.userId, post.title, post.price, imageList[0]);
-            }}
-          >
-            채팅하기
-            {/* Link */}
-          </Typography>
+          {userId !== post.userId ? (
+            <Typography
+              variant="h6"
+              fontWeight={'bold'}
+              onClick={() => {
+                clickChat(post.postNum, post.userId, post.title, post.price, imageList[0]);
+              }}
+            >
+              채팅하기
+            </Typography>
+          ) : (
+            <Typography variant="h6" fontWeight={'bold'}>
+              내 게시물
+            </Typography>
+          )}
         </Grid>
       </Grid>
       <BottomNav />
