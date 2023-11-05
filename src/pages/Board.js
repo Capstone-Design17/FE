@@ -129,8 +129,8 @@ export default function Board() {
         ) : postList.length > 0 ? (
           <div style={{ flex: '1' }}>
             {postList.map((post, index) => {
-              // const imageUrl = 'http://localhost:80/image/' + post.image.uuid;
-              const imageUrl = '/image/' + post.image.uuid; // 운영 환경의 url
+              const imageUrl = 'http://localhost:80/image/' + post.image.uuid;
+              // const imageUrl = '/image/' + post.image.uuid; // 운영 환경의 url
               return (
                 <Card
                   key={index}

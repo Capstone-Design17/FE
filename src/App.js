@@ -7,6 +7,8 @@ import SignUp from 'pages/SignUp';
 import Board from 'pages/Board';
 import Post from 'pages/Post';
 import PostDetail from 'pages/PostDetail';
+import Chatting from 'pages/Chatting';
+import ChatList from 'pages/ChatList';
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
         <Route path="/board" element={<Board />} />
         <Route path="/post" element={<Post />} />
         <Route path="/postDetail" element={<PostDetail />} />
+        <Route path="/chatting" element={<Chatting />} />
+        <Route path="/chatList" element={<ChatList />} />
       </Routes>
     </BrowserRouter>
   );
