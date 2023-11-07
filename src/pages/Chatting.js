@@ -130,8 +130,6 @@ export default function Chatting() {
   const connect = () => {
     console.log('Chatting Room: ' + state.postNum); // postNum은 roomId가 아님
     console.log('Chatting Room: ' + roomId); // postNum은 roomId가 아님
-    console.log(window.location);
-    console.log(window.location.host);
     // WebSocket
     const webSocketUrl = 'ws://' + window.location.host + '/api/ws';
     // const webSocketUrl = 'ws://localhost:8080/api/ws';
