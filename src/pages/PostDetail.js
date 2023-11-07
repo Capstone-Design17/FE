@@ -34,6 +34,7 @@ export default function PostDetail() {
 
   // API 호출
   useEffect(() => {
+    console.log('PostDetail');
     console.log(state);
     axios({
       url: '/api/board/getPost',
