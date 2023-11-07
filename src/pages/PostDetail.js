@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid';
 import { Link } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { Typography } from '@mui/material';
+import { Avatar, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
@@ -34,6 +34,7 @@ export default function PostDetail() {
 
   // API 호출
   useEffect(() => {
+    console.log('PostDetail');
     console.log(state);
     axios({
       url: '/api/board/getPost',
@@ -61,6 +62,13 @@ export default function PostDetail() {
         navigate('/board');
       });
   }, []);
+
+  const clickChat = (postNumber, sellerId, title, price, image) => {
+    console.log(postNumber);
+    // const thumbnail = 'http://localhost:80/image/' + image.uuid;
+    const thumbnail = '/image/' + image.uuid; // 실제 환경 Url
+    navigate('/chatting', { state: { postNum: postNumber, sellerId: sellerId, title: title, price: price, image: thumbnail } });
+  };
 
   return (
     <Background>
@@ -162,7 +170,9 @@ export default function PostDetail() {
           <Grid container direction="row" style={{ borderBottom: '1px solid #d3d3d3' }} p={2}>
             <Grid item xs={2} mr={2} style={{ display: 'flex' }}>
               {/* 프로필 사진 */}
-              <img src={profileImgUrl} style={{ maxWidth: '100%', maxHeight: '100%', margin: 'auto 0', objectFit: 'cover', borderRadius: '50%' }} />
+              {/* <Avatar */}
+
+              <Avatar alt="" src={profileImgUrl} sx={{ width: 56, height: 56 }} />
             </Grid>
             <Grid container item direction="column" xs mt={1}>
               <Grid item>
@@ -234,10 +244,22 @@ export default function PostDetail() {
           </Typography>
         </Grid>
         <Grid item xs={6} sx={{ backgroundColor: 'error.light', color: 'white' }} p={1}>
-          <Typography variant="h6" fontWeight={'bold'}>
-            채팅하기
-            {/* Link */}
-          </Typography>
+          {/* UserId가 SellerId면 Disabled 시키기 */}
+          {userId !== post.userId ? (
+            <Typography
+              variant="h6"
+              fontWeight={'bold'}
+              onClick={() => {
+                clickChat(post.postNum, post.userId, post.title, post.price, imageList[0]);
+              }}
+            >
+              채팅하기
+            </Typography>
+          ) : (
+            <Typography variant="h6" fontWeight={'bold'}>
+              내 게시물
+            </Typography>
+          )}
         </Grid>
       </Grid>
       <BottomNav />

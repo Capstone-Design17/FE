@@ -2,26 +2,30 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import CategoryIcon from '@mui/icons-material/Category';
+import ChatIcon from '@mui/icons-material/Chat';
+import ContactPageIcon from '@mui/icons-material/ContactPage';
+import { useNavigate } from 'react-router-dom';
 
 export default function SimpleBottomNavigation() {
-  const [value, setValue] = React.useState(0);
+  const navigate = useNavigate();
+  const board = () => {
+    navigate('/board');
+  };
+
+  const chatList = () => {
+    navigate('/chatList');
+  };
 
   return (
     <Box>
-      <BottomNavigation
-        showLabels
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
-      >
+      <BottomNavigation showLabels>
         {/* 내용 수정 필요 */}
-        <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-        <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-        <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+        <BottomNavigationAction label="홈" value="board" icon={<DashboardIcon />} onClick={board} />
+        <BottomNavigationAction label="카테고리" value="category" icon={<CategoryIcon />} />
+        <BottomNavigationAction label="채팅" value="chatList" icon={<ChatIcon />} onClick={chatList} />
+        <BottomNavigationAction label="마이페이지" value="mypage" icon={<ContactPageIcon />} />
       </BottomNavigation>
     </Box>
   );
