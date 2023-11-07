@@ -27,7 +27,7 @@ import Grid from '@mui/material/Grid';
 
 export default function Board() {
   const navigate = useNavigate();
-  const [userId, setUserId] = useState();
+  const [userId, setUserId] = useState('');
   const getUserId = (id) => {
     setUserId(id);
   };
@@ -49,43 +49,48 @@ export default function Board() {
   });
   const [pageNumber, setPageNumber] = useState(0);
 
-  // const getList = () => {
   useEffect(() => {
-    console.log('axios 호출');
-    axios({
-      url: '/api/board/getPostList',
-      method: 'get',
-      params: {
-        page: pageNumber,
-        keyword: keyword,
-      },
-    })
-      .then((response) => {
-        console.log('Get List');
-        console.log(response);
-        if (response.status === 200) {
-          // [postList, imageList]를 담은 리스트 생성
-          const post = response.data.postList.content;
-          const image = response.data.imageList;
-          const page = response.data.page;
-          if (post && image && post.length === image.length) {
-            const mergedList = response.data.postList.content.map((postItem, index) => ({
-              ...postItem,
-              image: image[index],
-            }));
-            setPostList(mergedList);
-            setPage(page);
-            console.log(postList);
-          }
-          setIsLoading(false);
-        } else {
-          throw new Error('데이터 불러오기 실패');
-        }
+    if (userId !== '') {
+      console.log('axios 호출');
+      axios({
+        url: '/api/board/getPostList',
+        method: 'get',
+        params: {
+          page: pageNumber,
+          keyword: keyword,
+        },
       })
-      .catch((error) => {
-        alert(error);
-      });
-  }, [pageNumber, keyword]);
+        .then((response) => {
+          console.log('Get List');
+          console.log(response);
+          if (response.status === 200) {
+            // [postList, imageList]를 담은 리스트 생성
+            if (response.data.message === '게시글 리스트 불러오기 성공') {
+              const post = response.data.postList.content;
+              const image = response.data.imageList;
+              const page = response.data.page;
+              if (post && image && post.length === image.length) {
+                const mergedList = response.data.postList.content.map((postItem, index) => ({
+                  ...postItem,
+                  image: image[index],
+                }));
+                setPostList(mergedList);
+                setPage(page);
+                console.log(postList);
+              }
+              setIsLoading(false);
+            } else {
+              alert(response.data.message);
+            }
+          } else {
+            throw new Error('정의되지 않은 에러');
+          }
+        })
+        .catch((error) => {
+          alert(error);
+        });
+    }
+  }, [userId, pageNumber, keyword]);
 
   const clickPost = (postNumber) => {
     navigate('/postDetail', { state: postNumber });
@@ -130,8 +135,8 @@ export default function Board() {
         ) : postList.length > 0 ? (
           <div style={{ flex: '1' }}>
             {postList.map((post, index) => {
-              const imageUrl = 'http://localhost:80/image/' + post.image.uuid;
-              // const imageUrl = '/image/' + post.image.uuid; // 운영 환경의 url
+              // const imageUrl = 'http://localhost:80/image/' + post.image.uuid;
+              const imageUrl = '/image/' + post.image.uuid; // 운영 환경의 url
               return (
                 <Card
                   key={index}

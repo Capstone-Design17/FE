@@ -83,8 +83,8 @@ export default function ChatList() {
 
   const clickChat = (postNumber, sellerId, image) => {
     console.log(postNumber);
-    const thumbnail = 'http://localhost:80/image/' + image.uuid;
-    // const thumbnail = '/image/' + image.uuid; // 실제 환경 Url
+    // const thumbnail = 'http://localhost:80/image/' + image.uuid;
+    const thumbnail = '/image/' + image.uuid; // 실제 환경 Url
     navigate('/chatting', { state: { postNum: postNumber, sellerId: sellerId, image: thumbnail } });
   };
 
@@ -103,8 +103,8 @@ export default function ChatList() {
             console.log(room);
             const createdAt = getTimeString(room.chat.createdAt);
 
-            // const imageUrl = '/image/' + room.image.uuid;
-            const imageUrl = 'http://localhost:80/image/' + room.image.uuid;
+            // const imageUrl = 'http://localhost:80/image/' + room.image.uuid;
+            const imageUrl = '/image/' + room.image.uuid;
             return (
               <Grid
                 key={index}

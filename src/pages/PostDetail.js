@@ -27,13 +27,14 @@ export default function PostDetail() {
 
   const [post, setPost] = useState([]);
   const [imageList, setImageList] = useState([]);
-  const profileImgUrl = 'http://localhost:80/image/user.png';
-  // const profileImgUrl = '/image/user.png'; // 실제 환경 Url
+  // const profileImgUrl = 'http://localhost:80/image/user.png';
+  const profileImgUrl = '/image/user.png'; // 실제 환경 Url
 
   // Session의 UserId가 Post의 UserId와 같으면 수정/삭제 버튼 생김
 
   // API 호출
   useEffect(() => {
+    console.log('PostDetail');
     console.log(state);
     axios({
       url: '/api/board/getPost',
@@ -64,8 +65,8 @@ export default function PostDetail() {
 
   const clickChat = (postNumber, sellerId, title, price, image) => {
     console.log(postNumber);
-    const thumbnail = 'http://localhost:80/image/' + image.uuid;
-    // const thumbnail = '/image/' + image.uuid; // 실제 환경 Url
+    // const thumbnail = 'http://localhost:80/image/' + image.uuid;
+    const thumbnail = '/image/' + image.uuid; // 실제 환경 Url
     navigate('/chatting', { state: { postNum: postNumber, sellerId: sellerId, title: title, price: price, image: thumbnail } });
   };
 
@@ -119,8 +120,8 @@ export default function PostDetail() {
             }}
           >
             {imageList.map((image, index) => {
-              const imageUrl = 'http://localhost:80/image/' + image.uuid;
-              // const imageUrl = '/image/' + image.uuid; // 실제 환경 Url
+              // const imageUrl = 'http://localhost:80/image/' + image.uuid;
+              const imageUrl = '/image/' + image.uuid; // 실제 환경 Url
               return (
                 <Paper key={index}>
                   <img src={imageUrl} style={{ width: '100%', objectFit: 'cover' }} alt={`Image ${index}`} />
