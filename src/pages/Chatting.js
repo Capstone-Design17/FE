@@ -29,6 +29,7 @@ export default function Chatting() {
     setUserId(id);
   };
 
+  const [post, setPost] = useState([]);
   const [chat, setChat] = useState([]); // 채팅 목록
   const [message, setMessage] = useState(''); // 실시간으로 전송할 메시지
   const handleMessage = (e) => {
@@ -69,6 +70,33 @@ export default function Chatting() {
         .catch((error) => alert(error));
     }
   }, [userId]);
+
+  useEffect(() => {
+    if (state.postNum !== null) {
+      axios({
+        url: '/api/board/getPost',
+        method: 'get',
+        params: {
+          postNum: state.postNum,
+        },
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            if (response.data.message === '게시글 불러오기 성공') {
+              setPost(response.data.postDto);
+            } else {
+              throw new Error('게시글 불러오기 실패');
+            }
+          } else {
+            throw new Error('정의되지 않은 에러');
+          }
+        })
+        .catch((error) => {
+          alert(error);
+          navigate('/chatList');
+        });
+    }
+  }, []);
 
   useEffect(() => {
     if (roomId != '') {
@@ -231,12 +259,12 @@ export default function Chatting() {
           >
             <Grid item>
               <Typography variant="subtitle1" fontWeight={'bold'} color={'text.secondary'}>
-                {state.title}
+                {post.title}
               </Typography>
             </Grid>
             <Grid item>
               <Typography variant="body2" color={'text.secondary'} fontWeight={'bold'}>
-                {state.price}원
+                {post.price}원
               </Typography>
             </Grid>
           </Grid>

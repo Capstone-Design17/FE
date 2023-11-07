@@ -75,6 +75,7 @@ export default function Board() {
             }));
             setPostList(mergedList);
             setPage(page);
+            console.log(postList);
           }
           setIsLoading(false);
         } else {
