@@ -133,8 +133,8 @@ export default function Chatting() {
     console.log(window.location);
     console.log(window.location.host);
     // WebSocket
-    // const webSocketUrl = 'ws://' + window.location.host + '/api/ws';
-    const webSocketUrl = 'ws://localhost:8080/api/ws';
+    const webSocketUrl = 'ws://' + window.location.host + '/api/ws';
+    // const webSocketUrl = 'ws://localhost:8080/api/ws';
     stompClient.current = Stomp.over(() => new WebSocket(webSocketUrl)); // Stomp Client
 
     // SockJS, Apic에서 SockJS로 테스트 할수가 없음
