@@ -131,7 +131,7 @@ export default function Chatting() {
     console.log('Chatting Room: ' + state.postNum); // postNum은 roomId가 아님
     console.log('Chatting Room: ' + roomId); // postNum은 roomId가 아님
     // WebSocket
-    const webSocketUrl = 'ws://' + window.location.host + '/api/ws';
+    const webSocketUrl = 'ws://' + window.location.host + ':8080/api/ws';
     // const webSocketUrl = 'ws://localhost:8080/api/ws';
     stompClient.current = Stomp.over(() => new WebSocket(webSocketUrl)); // Stomp Client
 
