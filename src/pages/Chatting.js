@@ -50,7 +50,7 @@ export default function Chatting() {
         method: 'post',
         data: {
           sellerId: state.sellerId,
-          userId: userId,
+          userId: state.userId,
           postNum: state.postNum,
         },
       })
@@ -131,8 +131,8 @@ export default function Chatting() {
     console.log('Chatting Room: ' + state.postNum); // postNum은 roomId가 아님
     console.log('Chatting Room: ' + roomId); // postNum은 roomId가 아님
     // WebSocket
-    const webSocketUrl = 'ws://' + window.location.host + ':8080/api/ws';
-    // const webSocketUrl = 'ws://localhost:8080/api/ws';
+    // const webSocketUrl = 'ws://' + window.location.host + ':8080/api/ws';
+    const webSocketUrl = 'ws://localhost:8080/api/ws';
     stompClient.current = Stomp.over(() => new WebSocket(webSocketUrl)); // Stomp Client
 
     // SockJS, Apic에서 SockJS로 테스트 할수가 없음
@@ -233,7 +233,8 @@ export default function Chatting() {
           </Grid>
           <Grid item xs>
             <Typography variant="h6" fontWeight={'bold'}>
-              {state.sellerId}
+              {/* 내가 아닌 이름 출력 */}
+              {userId === state.sellerId ? state.userId : state.sellerId}
             </Typography>
           </Grid>
           <Grid item>
@@ -247,7 +248,6 @@ export default function Chatting() {
           {/* State로 받기가 좋아보이나 채팅 목록에서 받는건 힘들어보이기도.. */}
           <Grid item style={{ color: 'white' }} mr={2}>
             {/* Avatar? */}
-            {/* <img src={profileImgUrl} style={{ maxWidth: '50px', maxHeight: '50px', objectFit: 'cover'}} /> */}
             <Avatar src={state.image} sx={{ width: 56, height: 56 }} />
           </Grid>
           <Grid
