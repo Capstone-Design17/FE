@@ -10,6 +10,7 @@ import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
 import Session from 'utils/Session';
 import { useState } from 'react';
+import Grid from '@mui/material/Grid';
 import Logout from 'components/Logout';
 
 export default function Navbar(props) {
@@ -43,13 +44,22 @@ export default function Navbar(props) {
     <>
       <AppBar position="static" color="error">
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Text
-            {/* 로고 넣기 */}
-          </Typography>
-          <IconButton size="large" edge="start" color="inherit" aria-label="menu" onClick={openMenu}>
-            <MenuIcon />
-          </IconButton>
+          <Grid container>
+            <Grid item xs={1}>
+              <div>가</div>
+            </Grid>
+            <Grid item xs>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} textAlign={'center'}>
+                Text
+                {/* 로고 넣기 */}
+              </Typography>
+            </Grid>
+            <Grid item xs={1} display={'flex'} justifyContent={'end'}>
+              <IconButton size="large" edge="end" color="inherit" aria-label="menu" onClick={openMenu} style={{ margin: 0, padding: 0 }}>
+                <MenuIcon />
+              </IconButton>
+            </Grid>
+          </Grid>
         </Toolbar>
       </AppBar>
       <Modal open={open} onClose={closeMenu} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
