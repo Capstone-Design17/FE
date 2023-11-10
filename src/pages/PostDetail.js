@@ -15,6 +15,8 @@ import createdAt from 'utils/Time';
 import Carousel from 'react-material-ui-carousel';
 import { Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import Snackbar from '@mui/material/Snackbar';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 export default function PostDetail() {
   const navigate = useNavigate();
@@ -70,17 +72,99 @@ export default function PostDetail() {
     navigate('/chatting', { state: { postNum: postNumber, sellerId: sellerId, title: title, price: price, image: thumbnail } });
   };
 
+  const [favorite, setFavorite] = useState(0);
+  const [snackMessage, setSnackMessage] = useState('');
+  useEffect(() => {
+    if (userId !== '') {
+      axios({
+        url: '/api/board/favorite',
+        method: 'get',
+        params: {
+          userId: userId,
+          postNum: state,
+        },
+      })
+        .then((response) => {
+          console.log(response.data);
+          if (response.status === 200) {
+            if (response.data.message === '관심 등록 확인 성공') {
+              console.log('관심 등록 조회 성공');
+              setFavorite(response.data.data.status);
+            } else {
+              console.log(response.data.message);
+            }
+          } else {
+            throw new Error('정의되지 않은 에러');
+          }
+        })
+        .catch((error) => alert(error));
+    }
+  }, [userId]);
+
+  const [stateSnack, setStateSnack] = React.useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'center',
+  });
+  const { vertical, horizontal, open } = stateSnack;
+
+  const handleClick = (newState) => () => {
+    // // axios 호출
+    console.log(userId + ': ' + state + ': ' + favorite);
+    axios({
+      url: '/api/board/favorite',
+      method: 'post',
+      data: {
+        userId: userId,
+        postNum: state,
+        status: favorite,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          console.log(response.data.message);
+          if (response.data.message === '관심 등록 성공') {
+            setSnackMessage('관심 목록에 등록했습니다.');
+            setFavorite(response.data.data.status);
+            setStateSnack({ ...newState, open: true });
+          } else if (response.data.message === '관심 등록 취소 성공') {
+            setSnackMessage('관심 목록을 취소했습니다.');
+            setFavorite(response.data.data.status);
+            setStateSnack({ ...newState, open: true });
+          } else {
+            console.log(response.data.message);
+          }
+        } else {
+          throw new Error('');
+        }
+      })
+      .catch((error) => alert(error));
+  };
+
+  const handleClose = () => {
+    setStateSnack({ ...stateSnack, open: false });
+  };
+
   return (
     <Background>
       <Navbar getUserId={getUserId} userId={userId} />
-      <Grid container style={{ backgroundColor: '#d32f2f' }} p={1}>
+      <Grid container style={{ backgroundColor: '#d32f2f' }} p={1} pr={2} pl={2}>
         <Grid item xs>
           <Link to={'/board'} style={{ textDecoration: 'none', color: 'white' }}>
             <ArrowBackIcon />
           </Link>
         </Grid>
-        <Grid item>
-          <FavoriteBorderIcon style={{ color: 'white' }} />
+        <Grid item display={'flex'}>
+          {/* 관심등록 */}
+          {favorite === 0 ? (
+            <div onClick={handleClick({ vertical: 'top', horizontal: 'left' })}>
+              <FavoriteBorderIcon style={{ color: 'white' }} />
+            </div>
+          ) : (
+            <div onClick={handleClick({ vertical: 'top', horizontal: 'left' })}>
+              <FavoriteIcon style={{ color: 'white' }} />
+            </div>
+          )}
         </Grid>
       </Grid>
 
@@ -262,6 +346,10 @@ export default function PostDetail() {
           )}
         </Grid>
       </Grid>
+      <Box sx={{ width: 500 }}>
+        {/* {action} */}
+        <Snackbar anchorOrigin={{ vertical, horizontal }} autoHideDuration={3000} open={open} onClose={handleClose} message={snackMessage} key={vertical + horizontal} />
+      </Box>
       <BottomNav />
     </Background>
   );

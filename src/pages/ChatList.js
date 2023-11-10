@@ -81,11 +81,11 @@ export default function ChatList() {
     return timeValue;
   };
 
-  const clickChat = (postNumber, sellerId, image) => {
+  const clickChat = (postNumber, sellerId, userId, image) => {
     console.log(postNumber);
     // const thumbnail = 'http://localhost:80/image/' + image.uuid;
     const thumbnail = '/image/' + image.uuid; // 실제 환경 Url
-    navigate('/chatting', { state: { postNum: postNumber, sellerId: sellerId, image: thumbnail } });
+    navigate('/chatting', { state: { postNum: postNumber, sellerId: sellerId, userId: userId, image: thumbnail } });
   };
 
   return (
@@ -100,7 +100,7 @@ export default function ChatList() {
         {/* 채팅 삭제 기능 */}
         {roomList.length > 0 ? (
           roomList.map((room, index) => {
-            console.log(room);
+            console.log(room.roomNum + ': ' + room.postNum + ': ' + room.sellerId + ': ' + room.userId + ': ' + room.roomId);
             const createdAt = getTimeString(room.chat.createdAt);
 
             // const imageUrl = 'http://localhost:80/image/' + room.image.uuid;
@@ -114,7 +114,8 @@ export default function ChatList() {
                 mb={1}
                 style={{ height: '80px', borderTop: '1px solid lightgray' }}
                 onClick={() => {
-                  clickChat(room.postNum, room.sellerId, room.image);
+                  console.log(room.postNum, room.sellerId, room.image);
+                  clickChat(room.postNum, room.sellerId, room.userId, room.image);
                 }}
               >
                 <Grid item xs={2} mr={3} display={'flex'} alignItems="center">
