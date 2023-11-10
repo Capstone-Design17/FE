@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { Link } from 'react-router-dom';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Avatar, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -151,7 +151,7 @@ export default function PostDetail() {
       <Grid container style={{ backgroundColor: '#d32f2f' }} p={1} pr={2} pl={2}>
         <Grid item xs>
           <Link to={'/board'} style={{ textDecoration: 'none', color: 'white' }}>
-            <ArrowBackIcon />
+            <ArrowBackIosIcon />
           </Link>
         </Grid>
         <Grid item display={'flex'}>
