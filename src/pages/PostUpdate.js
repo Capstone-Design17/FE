@@ -99,6 +99,8 @@ export default function PostUpdate() {
 
   const updatePost = () => {
     console.log('UpdatePost');
+    console.log(post.status);
+    console.log(post.createAt);
     axios({
       url: '/api/board/post',
       method: 'put',
@@ -111,7 +113,7 @@ export default function PostUpdate() {
         content: content,
         price: price,
         detailLocation: detailLocation,
-        state: post.state,
+        status: post.status,
         createAt: post.createAt,
         boughtUserId: post.boughtUserId,
       },
@@ -185,24 +187,6 @@ export default function PostUpdate() {
           noValidate
           autoComplete="off"
         >
-          {/* 사진 등록 */}
-          {/* <Button component="label" variant="outlined" color="error">
-            <AddAPhotoIcon />
-            <VisuallyHiddenInput type="file" accept="image/*" multiple onChange={onChangeImg} />
-          </Button>
-          {images.length > 0 && (
-            <div>
-              <Typography variant="caption" m={1} component="h6">
-                등록된 이미지 : {images.length}
-              </Typography>
-              <Typography variant="caption" m={2} component="h6">
-                {images.map((image) => (
-                  <li key={image.name}>{image.name}</li>
-                ))}
-              </Typography>
-            </div>
-          )} */}
-
           {/* 제목 */}
           <Grid container spacing={2}>
             <Grid item xs>
@@ -289,8 +273,6 @@ export default function PostUpdate() {
           </Typography>
         </Grid>
         <Grid item xs={6} sx={{ backgroundColor: 'error.light', color: 'white' }} p={1}>
-          {/* UserId가 SellerId면 Disabled 시키기 */}
-
           <Button disabled={!isAllValid} onClick={updatePost}>
             <Typography variant="h6" fontWeight={'bold'} color={'white'}>
               저장
