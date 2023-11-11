@@ -11,6 +11,7 @@ import Chatting from 'pages/Chatting';
 import ChatList from 'pages/ChatList';
 import MyPage from 'pages/MyPage';
 import Favorite from 'pages/Favorite';
+import PostUpdate from 'pages/PostUpdate';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/chatList" element={<ChatList />} />
         <Route path="/myPage" element={<MyPage />} />
         <Route path="/favorite" element={<Favorite />} />
+        <Route path="/postUpdate" element={<PostUpdate />} />
       </Routes>
     </BrowserRouter>
   );

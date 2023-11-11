@@ -17,6 +17,7 @@ import { Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import EditIcon from '@mui/icons-material/Edit';
 
 export default function PostDetail() {
   const navigate = useNavigate();
@@ -92,6 +93,7 @@ export default function PostDetail() {
               setFavorite(response.data.data.status);
             } else {
               console.log(response.data.message);
+              setFavorite(1);
             }
           } else {
             throw new Error('정의되지 않은 에러');
@@ -155,8 +157,18 @@ export default function PostDetail() {
           </Link>
         </Grid>
         <Grid item display={'flex'}>
-          {/* 관심등록 */}
-          {favorite === 0 ? (
+          {/* 관심등록 or 수정*/}
+          {userId === post.userId ? (
+            <div>
+              <EditIcon
+                onClick={() => {
+                  console.log('Update: ' + post.postNum);
+                  navigate('/postUpdate', { state: { postNum: post.postNum } });
+                }}
+                style={{ color: 'white' }}
+              />
+            </div>
+          ) : favorite === 0 ? (
             <div onClick={handleClick({ vertical: 'top', horizontal: 'left' })}>
               <FavoriteBorderIcon style={{ color: 'white' }} />
             </div>
