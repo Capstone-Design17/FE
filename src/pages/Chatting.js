@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import { useRef } from 'react';
 import SendIcon from '@mui/icons-material/Send';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -228,7 +228,7 @@ export default function Chatting() {
           <Grid item xs={1}>
             {/* 채팅 리스트로 돌아가기 */}
             <Link to="/chatList" style={{ color: 'black' }}>
-              <ArrowBackIcon />
+              <ArrowBackIosIcon />
             </Link>
           </Grid>
           <Grid item xs>
