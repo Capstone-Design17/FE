@@ -42,13 +42,7 @@ export default function PostUpdate() {
   });
 
   const [location, setLocation] = useState();
-  const {
-    title,
-    // category,
-    price,
-    content,
-    detailLocation,
-  } = postInput;
+  const { title, category, price, content, detailLocation } = postInput;
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -90,6 +84,8 @@ export default function PostUpdate() {
         if (response.status === 200) {
           if (response.data.message === '게시글 불러오기 성공') {
             setPost(response.data.postDto);
+            setPostInput(response.data.postDto);
+            setLocation(response.data.postDto.location);
             setImageList(response.data.imageList);
           } else {
             alert(response.data.message);
@@ -101,23 +97,45 @@ export default function PostUpdate() {
       .catch((error) => alert(error));
   }, []);
 
+  const updatePost = () => {
+    console.log('UpdatePost');
+    axios({
+      url: '/api/board/post',
+      method: 'put',
+      data: {
+        postNum: state.postNum,
+        userId: userId,
+        location: location,
+        title: title,
+        category: category,
+        content: content,
+        price: price,
+        detailLocation: detailLocation,
+        state: post.state,
+        createAt: post.createAt,
+        boughtUserId: post.boughtUserId,
+      },
+    })
+      .then((response) => {
+        console.log(response.data);
+        if (response.status === 200) {
+          if (response.data.message === '게시글 수정 성공') {
+            alert('수정 완료');
+            navigate('/postDetail', { state: post.postNum });
+          } else {
+            alert(response.data.message);
+          }
+        } else {
+          throw new Error('정의되지 않은 에러');
+        }
+      })
+      .catch((error) => alert(error));
+  };
+
   return (
     <Background>
       <Navbar getUserId={getUserId} userId={userId} />
 
-      {/* <div
-        style={{
-          margin: '0',
-          marginTop: '0',
-          display: 'flex',
-          flexDirection: 'column',
-          flex: '1',
-          overflow: 'auto',
-          overflowX: 'hidden',
-          msOverflowStyle: 'none',
-          scrollbarWidth: 'none',
-        }}
-      > */}
       {/* 사진 클릭 시 확대 필요 */}
       <div>
         <Carousel
@@ -250,7 +268,7 @@ export default function PostUpdate() {
             label=""
             margin="dense"
             color="error"
-            value={location || post.location}
+            value={location || ''}
             key={post.location}
             InputProps={{
               readOnly: true,
@@ -273,7 +291,7 @@ export default function PostUpdate() {
         <Grid item xs={6} sx={{ backgroundColor: 'error.light', color: 'white' }} p={1}>
           {/* UserId가 SellerId면 Disabled 시키기 */}
 
-          <Button disabled={!isAllValid}>
+          <Button disabled={!isAllValid} onClick={updatePost}>
             <Typography variant="h6" fontWeight={'bold'} color={'white'}>
               저장
             </Typography>
