@@ -17,6 +17,7 @@ import { Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import EditIcon from '@mui/icons-material/Edit';
 
 export default function PostDetail() {
   const navigate = useNavigate();
@@ -92,6 +93,7 @@ export default function PostDetail() {
               setFavorite(response.data.data.status);
             } else {
               console.log(response.data.message);
+              setFavorite(1);
             }
           } else {
             throw new Error('정의되지 않은 에러');
@@ -145,6 +147,37 @@ export default function PostDetail() {
     setStateSnack({ ...stateSnack, open: false });
   };
 
+  const changeStatus = () => {
+    console.log('Status 변경');
+    let chStatus = 1;
+    if (post.status !== 0) {
+      chStatus = 0;
+    }
+    console.log(chStatus);
+
+    axios({
+      url: '/api/board/post',
+      method: 'patch',
+      data: {
+        postNum: post.postNum,
+        status: chStatus,
+      },
+    })
+      .then((response) => {
+        console.log(response.data);
+        if (response.status === 200) {
+          if (response.data.message === '게시글 상태 수정 성공') {
+            setPost(response.data.data);
+          } else {
+            alert(response.data.message);
+          }
+        } else {
+          throw new Error('정의되지 않은 에러');
+        }
+      })
+      .catch((error) => alert(error));
+  };
+
   return (
     <Background>
       <Navbar getUserId={getUserId} userId={userId} />
@@ -155,8 +188,18 @@ export default function PostDetail() {
           </Link>
         </Grid>
         <Grid item display={'flex'}>
-          {/* 관심등록 */}
-          {favorite === 0 ? (
+          {/* 관심등록 or 수정*/}
+          {userId === post.userId ? (
+            <div>
+              <EditIcon
+                onClick={() => {
+                  console.log('Update: ' + post.postNum);
+                  navigate('/postUpdate', { state: { postNum: post.postNum } });
+                }}
+                style={{ color: 'white' }}
+              />
+            </div>
+          ) : favorite === 0 ? (
             <div onClick={handleClick({ vertical: 'top', horizontal: 'left' })}>
               <FavoriteBorderIcon style={{ color: 'white' }} />
             </div>
@@ -340,9 +383,26 @@ export default function PostDetail() {
               채팅하기
             </Typography>
           ) : (
-            <Typography variant="h6" fontWeight={'bold'}>
-              내 게시물
-            </Typography>
+            <Grid container direction={'column'}>
+              <Grid item>
+                <Typography variant="subtitle1" fontWeight={'bold'} onClick={changeStatus}>
+                  {/* 클릭 시 판매 상태 변환 */}
+                  변경하기
+                </Typography>
+              </Grid>
+              <Grid item height={'20px'} padding={0}>
+                {/* Status에 따라 바뀜 */}
+                {post.status === 0 ? (
+                  <Typography variant="caption" fontWeight={'bold'}>
+                    판매완료
+                  </Typography>
+                ) : (
+                  <Typography variant="caption" fontWeight={'bold'}>
+                    판매중
+                  </Typography>
+                )}
+              </Grid>
+            </Grid>
           )}
         </Grid>
       </Grid>
