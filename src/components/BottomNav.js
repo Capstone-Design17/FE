@@ -14,6 +14,10 @@ export default function SimpleBottomNavigation() {
     navigate('/board');
   };
 
+  const category = () => {
+    navigate('/category');
+  };
+
   const chatList = () => {
     navigate('/chatList');
   };
@@ -27,7 +31,7 @@ export default function SimpleBottomNavigation() {
       <BottomNavigation showLabels>
         {/* 내용 수정 필요 */}
         <BottomNavigationAction label="홈" value="board" icon={<DashboardIcon />} onClick={board} />
-        <BottomNavigationAction label="카테고리" value="category" icon={<CategoryIcon />} />
+        <BottomNavigationAction label="카테고리" value="category" icon={<CategoryIcon />} onClick={category} />
         <BottomNavigationAction label="채팅" value="chatList" icon={<ChatIcon />} onClick={chatList} />
         <BottomNavigationAction label="마이페이지" value="mypage" icon={<ContactPageIcon />} onClick={myPage} />
       </BottomNavigation>
