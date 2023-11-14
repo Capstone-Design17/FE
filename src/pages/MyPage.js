@@ -11,10 +11,15 @@ export default function MyPage() {
     navigate('/favorite');
   };
 
+  const sellList = () => {
+    navigate('/sellList');
+  };
+
   return (
     <Background>
       <div className="contentWrap">
         <Button onClick={() => favorite()}>관심 목록</Button>
+        <Button onClick={() => sellList()}>판매 목록</Button>
       </div>
       <BottomNav />
     </Background>
