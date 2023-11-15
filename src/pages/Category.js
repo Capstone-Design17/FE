@@ -159,16 +159,6 @@ export default function Category() {
               </Typography>
             </Grid>
           </Grid>
-          {/* <Grid item xs={4} container direction={'column'} onClick={() => clickCategory('삽니다')}>
-            <Grid item>
-              <LocalMallIcon fontSize="large" />
-            </Grid>
-            <Grid item>
-              <Typography variant="caption" fontWeight={'bold'} color={'text.secondary'}>
-                삽니다
-              </Typography>
-            </Grid>
-          </Grid> */}
         </Grid>
 
         <Typography variant="subtitle1" fontWeight={'bold'} p={2} borderTop={'1px solid black'} mt={6} mb={2}>
