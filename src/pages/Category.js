@@ -36,7 +36,7 @@ export default function Category() {
       <Navbar getUserId={getUserId} userId={userId} />
 
       <div className="contentWrap">
-        <Typography variant="h6" fontWeight={'bold'} mb={8}>
+        <Typography variant="h6" fontWeight={'bold'}>
           카테고리
         </Typography>
 
@@ -44,6 +44,9 @@ export default function Category() {
         {/* keyword를 입력한 상태로 들어가야 함  state로 넘기기?*/}
         {/* Board는 title 검색만 keyword로 가능한 상태 */}
 
+        <Typography variant="subtitle1" fontWeight={'bold'} p={2} borderTop={'1px solid black'} mt={6} mb={2}>
+          구매
+        </Typography>
         <Grid container textAlign={'center'} rowSpacing={6}>
           <Grid item xs={4} container direction={'column'} onClick={() => clickCategory('디지털기기')}>
             {/* 각 이미지가 들어갈 자리 */}
@@ -156,6 +159,22 @@ export default function Category() {
               </Typography>
             </Grid>
           </Grid>
+          {/* <Grid item xs={4} container direction={'column'} onClick={() => clickCategory('삽니다')}>
+            <Grid item>
+              <LocalMallIcon fontSize="large" />
+            </Grid>
+            <Grid item>
+              <Typography variant="caption" fontWeight={'bold'} color={'text.secondary'}>
+                삽니다
+              </Typography>
+            </Grid>
+          </Grid> */}
+        </Grid>
+
+        <Typography variant="subtitle1" fontWeight={'bold'} p={2} borderTop={'1px solid black'} mt={6} mb={2}>
+          판매
+        </Typography>
+        <Grid container textAlign={'center'} rowSpacing={6}>
           <Grid item xs={4} container direction={'column'} onClick={() => clickCategory('삽니다')}>
             <Grid item>
               <LocalMallIcon fontSize="large" />
