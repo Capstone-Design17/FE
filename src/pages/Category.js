@@ -44,7 +44,7 @@ export default function Category() {
         {/* keyword를 입력한 상태로 들어가야 함  state로 넘기기?*/}
         {/* Board는 title 검색만 keyword로 가능한 상태 */}
 
-        <Typography variant="subtitle1" fontWeight={'bold'} p={2} borderTop={'1px solid black'} mt={6} mb={2}>
+        <Typography variant="subtitle1" fontWeight={'bold'} p={2} borderTop={'1px solid lightgray'} mt={6} mb={2}>
           구매
         </Typography>
         <Grid container textAlign={'center'} rowSpacing={6}>
@@ -161,7 +161,7 @@ export default function Category() {
           </Grid>
         </Grid>
 
-        <Typography variant="subtitle1" fontWeight={'bold'} p={2} borderTop={'1px solid black'} mt={6} mb={2}>
+        <Typography variant="subtitle1" fontWeight={'bold'} p={2} borderTop={'1px solid lightgray'} mt={6} mb={2}>
           판매
         </Typography>
         <Grid container textAlign={'center'} rowSpacing={6}>

@@ -14,6 +14,7 @@ import Favorite from 'pages/Favorite';
 import PostUpdate from 'pages/PostUpdate';
 import SellList from 'pages/SellList';
 import Category from 'pages/Category';
+import UpdateUser from 'pages/UpdateUser';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
         <Route path="/postUpdate" element={<PostUpdate />} />
         <Route path="/sellList" element={<SellList />} />
         <Route path="/category" element={<Category />} />
+        <Route path="updateUser" element={<UpdateUser />} />
       </Routes>
     </BrowserRouter>
   );

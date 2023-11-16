@@ -107,11 +107,14 @@ export default function ChatList() {
             const imageUrl = '/image/' + room.image.uuid;
             return (
               <Grid
+                display={'flex'}
+                alignItems={'center'}
                 key={index}
                 container
                 direction={'row'}
                 p={1}
-                mb={1}
+                pt={2}
+                mb={2}
                 style={{ height: '80px', borderTop: '1px solid lightgray' }}
                 onClick={() => {
                   console.log(room.postNum, room.sellerId, room.image);
