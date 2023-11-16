@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Background from 'components/Background';
 import Navbar from 'components/Navbar';
 import BottomNav from 'components/BottomNav';
@@ -27,6 +27,7 @@ import Grid from '@mui/material/Grid';
 
 export default function Board() {
   const navigate = useNavigate();
+  const { state } = useLocation();
   const [userId, setUserId] = useState('');
   const getUserId = (id) => {
     setUserId(id);
@@ -37,7 +38,10 @@ export default function Board() {
     setSearchInput(e.target.value);
     console.log(searchInput);
   };
-  const [keyword, setKeyword] = useState();
+
+  // 일단 기본값, 카테고리 검색 시 state를 받음 // useLocation? or null
+  const [type, setType] = useState(state ? state.type : null);
+  const [keyword, setKeyword] = useState(state ? state.keyword : null);
 
   const [postList, setPostList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -52,11 +56,13 @@ export default function Board() {
   useEffect(() => {
     if (userId !== '') {
       console.log('axios 호출');
+      console.log(type + ': ' + keyword);
       axios({
         url: '/api/board/getPostList',
         method: 'get',
         params: {
           page: pageNumber,
+          type: type,
           keyword: keyword,
         },
       })
@@ -109,6 +115,13 @@ export default function Board() {
           placeholder="검색어를 입력하세요."
           style={{ margin: '10px 0 10px 0' }}
           onChange={handleSearchInput}
+          onKeyDown={(ev) => {
+            if (ev.key === 'Enter') {
+              setPageNumber(0);
+              setKeyword(searchInput);
+              setType('T');
+            }
+          }}
           InputProps={{
             endAdornment: (
               <InputAdornment
@@ -117,6 +130,7 @@ export default function Board() {
                 onClick={() => {
                   setPageNumber(0);
                   setKeyword(searchInput);
+                  setType('T');
                 }}
               >
                 <SearchIcon />
@@ -131,7 +145,11 @@ export default function Board() {
 
         {/* 반복 Card 구조*/}
         {isLoading ? (
-          <p>Loading...</p>
+          <div style={{ display: 'flex', alignItems: 'center', height: '100%', justifyContent: 'center' }}>
+            <Typography variant="body1" textAlign={'center'}>
+              Loading...
+            </Typography>
+          </div>
         ) : postList.length > 0 ? (
           <div style={{ flex: '1' }}>
             {postList.map((post, index) => {
@@ -184,7 +202,11 @@ export default function Board() {
             })}
           </div>
         ) : (
-          <p>No Data</p>
+          <div style={{ display: 'flex', alignItems: 'center', height: '100%', justifyContent: 'center' }}>
+            <Typography variant="body1" textAlign={'center'}>
+              등록된 아이템이 없습니다.
+            </Typography>
+          </div>
         )}
 
         <div style={{ width: '100%', textAlign: 'center', padding: '10px 0 20px 0' }}>

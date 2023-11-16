@@ -26,8 +26,8 @@ export default function Category() {
       label: '가공식품',
     },
     {
-      value: '스포츠',
-      label: '레저',
+      value: '스포츠/레저',
+      label: '스포츠/레저',
     },
     {
       value: '취미/게임/음반',
