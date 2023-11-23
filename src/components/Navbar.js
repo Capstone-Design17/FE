@@ -12,8 +12,11 @@ import Session from 'utils/Session';
 import { useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Logout from 'components/Logout';
+import { useNavigate } from 'react-router-dom';
+import logo from 'assets/tomato_logo.png';
 
 export default function Navbar(props) {
+  const navigate = useNavigate();
   const style = {
     position: 'absolute',
     top: '20%',
@@ -39,6 +42,9 @@ export default function Navbar(props) {
   }, [isSessionValid, props]);
 
   // const logoutSession = logout();
+  const home = () => {
+    navigate('/board');
+  };
 
   return (
     <>
@@ -46,13 +52,11 @@ export default function Navbar(props) {
         <Toolbar>
           <Grid container>
             <Grid item xs={1}>
-              <div>가</div>
+              <div></div>
             </Grid>
-            <Grid item xs>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} textAlign={'center'}>
-                Text
-                {/* 로고 넣기 */}
-              </Typography>
+            <Grid item xs textAlign={'center'}>
+              {/* Logo */}
+              <img src={logo} style={{ height: '46px', marginTop: '6px', bottom: '0' }} onClick={home} />
             </Grid>
             <Grid item xs={1} display={'flex'} justifyContent={'end'}>
               <IconButton size="large" edge="end" color="inherit" aria-label="menu" onClick={openMenu} style={{ margin: 0, padding: 0 }}>

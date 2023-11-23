@@ -12,6 +12,8 @@ import LocalMallIcon from '@mui/icons-material/LocalMall';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import InfoIcon from '@mui/icons-material/Info';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import { useEffect } from 'react';
+import axios from 'axios';
 
 export default function MyPage() {
   const navigate = useNavigate();
@@ -19,6 +21,33 @@ export default function MyPage() {
   const getUserId = (id) => {
     setUserId(id);
   };
+
+  const [location, setLocation] = useState('');
+
+  useEffect(() => {
+    if (userId !== '') {
+      axios({
+        url: '/api/user/location',
+        method: 'get',
+        params: {
+          userId: userId,
+        },
+      })
+        .then((response) => {
+          console.log(response.data);
+          if (response.status === 200) {
+            if (response.data.message === '위치 조회 성공') {
+              setLocation(response.data.data);
+            } else {
+              alert(response.data.message);
+            }
+          } else {
+            throw new Error('정의되지 않은 에러');
+          }
+        })
+        .catch((error) => alert(error));
+    }
+  }, [userId]);
 
   const updateUser = () => {
     navigate('/updateUser');
@@ -36,22 +65,28 @@ export default function MyPage() {
     <Background>
       <Navbar getUserId={getUserId} userId={userId} />
       <div className="contentWrap">
-        <Typography variant="h6" fontWeight={'bold'} pb={3}>
+        <Typography variant="h6" fontWeight={'bold'} pb={1} borderBottom={'1px solid lightgray'}>
           내정보
         </Typography>
 
         <Typography variant="subtitle1" fontWeight={'bold'} mt={3} mb={3}>
           프로필
         </Typography>
-        <Grid container borderBottom={'1px solid lightgray'} pb={3} display={'flex'} alignItems={'center'}>
-          <Grid item xs={2} mr={1}>
+        <Grid container borderBottom={'1px solid lightgray'} pb={3} display={'flex'}>
+          <Grid item xs={2} mr={1} display={'flex'} alignItems={'center'}>
             <Avatar sx={{ width: 56, height: 56 }} />
           </Grid>
           <Grid item xs>
-            <Typography variant="h6">{userId}</Typography>
+            <Typography variant="body1" fontWeight={'bold'}>
+              {/* 닉네임 받아서 표시 */}
+              {userId}
+            </Typography>
+            <Typography variant="caption" component="div" fontWeight={'bold'} color={'text.secondary'} sx={{ textOverflow: 'ellipsis' }}>
+              {location}
+            </Typography>
           </Grid>
           <Grid item>
-            <Button variant="contained" sx={{ backgroundColor: 'text.disabled' }} onClick={() => updateUser()}>
+            <Button variant="text" size="small" style={{ color: 'black' }} onClick={() => updateUser()}>
               프로필 수정
             </Button>
           </Grid>

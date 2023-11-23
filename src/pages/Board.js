@@ -19,10 +19,7 @@ import createdAt from 'utils/Time';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
-import SaveIcon from '@mui/icons-material/Save';
-import PrintIcon from '@mui/icons-material/Print';
-import ShareIcon from '@mui/icons-material/Share';
-import CreateIcon from '@mui/icons-material/Create';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Grid from '@mui/material/Grid';
 
 export default function Board() {
@@ -102,6 +99,47 @@ export default function Board() {
     navigate('/postDetail', { state: postNumber });
   };
 
+  // const [location, setLocation] = useState('');
+  const searchByLocation = () => {
+    console.log('현재 위치로 검색');
+    axios({
+      url: '/api/user/location',
+      method: 'get',
+      params: {
+        userId: userId,
+      },
+    })
+      .then((response) => {
+        console.log(response.data);
+        if (response.status === 200) {
+          if (response.data.message === '위치 조회 성공') {
+            // setLocation(response.data.data);
+            // console.log(location);
+            // setLocation이 아니라
+            setType('L');
+            setKeyword(response.data.data);
+          } else {
+            alert(response.data.message);
+          }
+        } else {
+          throw new Error('정의되지 않은 에러');
+        }
+      })
+      .catch((error) => alert(error));
+  };
+
+  const actions = [
+    {
+      icon: (
+        <Link to={'/post'} style={{ textDecoration: 'none', color: '#5f5f5f', display: 'flex' }}>
+          <EditIcon />
+        </Link>
+      ),
+      name: '글쓰기',
+    },
+    { icon: <LocationOnIcon onClick={searchByLocation} />, name: '위치 검색' },
+  ];
+
   return (
     <Background>
       <Navbar getUserId={getUserId} userId={userId} />
@@ -168,7 +206,7 @@ export default function Board() {
                     <CardContent sx={{ flex: '1 0 auto', p: 1 }} style={{ paddingBottom: '8px' }}>
                       <Grid container item xs direction="row" p={0} m={0}>
                         <Grid item pr={1} xs>
-                          <Typography component="h4" variant="subtitle1" style={{ maxWidth: '160px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          <Typography component="h4" variant="subtitle1" style={{ maxWidth: '110px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {post.title}
                           </Typography>
                         </Grid>
@@ -178,7 +216,7 @@ export default function Board() {
                           </Typography>
                         </Grid>
                       </Grid>
-                      <Typography variant="caption" color="text.secondary" component="div" style={{ height: '40px', maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      <Typography variant="caption" color="text.secondary" component="div" style={{ height: '40px', width: '100%', maxWidth: '160px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {post.location}
                       </Typography>
 
@@ -235,19 +273,3 @@ export default function Board() {
     </Background>
   );
 }
-
-const actions = [
-  {
-    icon: (
-      <Link to={'/post'} style={{ textDecoration: 'none', color: '#5f5f5f', display: 'flex' }}>
-        <EditIcon />
-      </Link>
-    ),
-    name: '글쓰기',
-  },
-  // 추후 목록 수정
-  { icon: <CreateIcon />, name: 'ds' },
-  { icon: <SaveIcon />, name: 'Save' },
-  { icon: <PrintIcon />, name: 'Print' },
-  { icon: <ShareIcon />, name: 'Share' },
-];

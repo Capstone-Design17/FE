@@ -1,6 +1,6 @@
 import React from 'react';
 import 'styles/Logo.css';
-import logo from '../logo.svg';
+import logo from 'assets/tomato_logo.png';
 
 export default function Logo() {
   return (

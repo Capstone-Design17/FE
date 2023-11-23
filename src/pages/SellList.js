@@ -154,7 +154,9 @@ export default function SellList() {
               }
             })
           ) : (
-            <div>판매 목록이 없습니다.</div>
+            <Typography variant="h6" fontWeight={'bold'} color={'text.secondary'} display={'flex'} justifyContent={'center'} marginTop={'50%'}>
+              판매 목록이 없습니다.
+            </Typography>
           )}
         </div>
       </div>

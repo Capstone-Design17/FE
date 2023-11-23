@@ -126,7 +126,9 @@ export default function Favorite() {
             );
           })
         ) : (
-          <div>등록된 관심 목록이 없습니다.</div>
+          <Typography variant="h6" fontWeight={'bold'} color={'text.secondary'} display={'flex'} justifyContent={'center'} marginTop={'50%'}>
+            등록된 관심 목록이 없습니다.
+          </Typography>
         )}
       </div>
       <BottomNav />
