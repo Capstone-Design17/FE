@@ -22,7 +22,7 @@ export default function MyPage() {
     setUserId(id);
   };
 
-  const [location, setLocation] = useState('');
+  const [location, setLocation] = useState('등록된 위치정보가 없습니다.');
 
   useEffect(() => {
     if (userId !== '') {
@@ -39,7 +39,7 @@ export default function MyPage() {
             if (response.data.message === '위치 조회 성공') {
               setLocation(response.data.data);
             } else {
-              alert(response.data.message);
+              console.log(response.data.message);
             }
           } else {
             throw new Error('정의되지 않은 에러');
