@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Background from 'components/Background';
 import Navbar from 'components/Navbar';
 import BottomNav from 'components/BottomNav';
@@ -19,14 +19,12 @@ import createdAt from 'utils/Time';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
-import SaveIcon from '@mui/icons-material/Save';
-import PrintIcon from '@mui/icons-material/Print';
-import ShareIcon from '@mui/icons-material/Share';
-import CreateIcon from '@mui/icons-material/Create';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Grid from '@mui/material/Grid';
 
 export default function Board() {
   const navigate = useNavigate();
+  const { state } = useLocation();
   const [userId, setUserId] = useState('');
   const getUserId = (id) => {
     setUserId(id);
@@ -37,7 +35,10 @@ export default function Board() {
     setSearchInput(e.target.value);
     console.log(searchInput);
   };
-  const [keyword, setKeyword] = useState();
+
+  // 일단 기본값, 카테고리 검색 시 state를 받음 // useLocation? or null
+  const [type, setType] = useState(state ? state.type : null);
+  const [keyword, setKeyword] = useState(state ? state.keyword : null);
 
   const [postList, setPostList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -52,11 +53,13 @@ export default function Board() {
   useEffect(() => {
     if (userId !== '') {
       console.log('axios 호출');
+      console.log(type + ': ' + keyword);
       axios({
         url: '/api/board/getPostList',
         method: 'get',
         params: {
           page: pageNumber,
+          type: type,
           keyword: keyword,
         },
       })
@@ -96,6 +99,47 @@ export default function Board() {
     navigate('/postDetail', { state: postNumber });
   };
 
+  // const [location, setLocation] = useState('');
+  const searchByLocation = () => {
+    console.log('현재 위치로 검색');
+    axios({
+      url: '/api/user/location',
+      method: 'get',
+      params: {
+        userId: userId,
+      },
+    })
+      .then((response) => {
+        console.log(response.data);
+        if (response.status === 200) {
+          if (response.data.message === '위치 조회 성공') {
+            // setLocation(response.data.data);
+            // console.log(location);
+            // setLocation이 아니라
+            setType('L');
+            setKeyword(response.data.data);
+          } else {
+            alert(response.data.message);
+          }
+        } else {
+          throw new Error('정의되지 않은 에러');
+        }
+      })
+      .catch((error) => alert(error));
+  };
+
+  const actions = [
+    {
+      icon: (
+        <Link to={'/post'} style={{ textDecoration: 'none', color: '#5f5f5f', display: 'flex' }}>
+          <EditIcon />
+        </Link>
+      ),
+      name: '글쓰기',
+    },
+    { icon: <LocationOnIcon onClick={searchByLocation} />, name: '위치 검색' },
+  ];
+
   return (
     <Background>
       <Navbar getUserId={getUserId} userId={userId} />
@@ -109,6 +153,13 @@ export default function Board() {
           placeholder="검색어를 입력하세요."
           style={{ margin: '10px 0 10px 0' }}
           onChange={handleSearchInput}
+          onKeyDown={(ev) => {
+            if (ev.key === 'Enter') {
+              setPageNumber(0);
+              setKeyword(searchInput);
+              setType('T');
+            }
+          }}
           InputProps={{
             endAdornment: (
               <InputAdornment
@@ -117,6 +168,7 @@ export default function Board() {
                 onClick={() => {
                   setPageNumber(0);
                   setKeyword(searchInput);
+                  setType('T');
                 }}
               >
                 <SearchIcon />
@@ -125,13 +177,14 @@ export default function Board() {
           }}
         ></TextField>
 
-        {/* 이미지 접근 예시 */}
-        {/* nginx proxy로 접근 */}
-        {/* <img src='/image/default.png' style={{width: '120px', marginBottom: '10px'}}/> */}
-
+        {/* Image nginx proxy로 접근 */}
         {/* 반복 Card 구조*/}
         {isLoading ? (
-          <p>Loading...</p>
+          <div style={{ display: 'flex', alignItems: 'center', height: '100%', justifyContent: 'center' }}>
+            <Typography variant="body1" textAlign={'center'}>
+              Loading...
+            </Typography>
+          </div>
         ) : postList.length > 0 ? (
           <div style={{ flex: '1' }}>
             {postList.map((post, index) => {
@@ -150,7 +203,7 @@ export default function Board() {
                     <CardContent sx={{ flex: '1 0 auto', p: 1 }} style={{ paddingBottom: '8px' }}>
                       <Grid container item xs direction="row" p={0} m={0}>
                         <Grid item pr={1} xs>
-                          <Typography component="h4" variant="subtitle1" style={{ maxWidth: '160px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          <Typography component="h4" variant="subtitle1" style={{ maxWidth: '110px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {post.title}
                           </Typography>
                         </Grid>
@@ -160,7 +213,7 @@ export default function Board() {
                           </Typography>
                         </Grid>
                       </Grid>
-                      <Typography variant="caption" color="text.secondary" component="div" style={{ height: '40px', maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      <Typography variant="caption" color="text.secondary" component="div" style={{ height: '40px', width: '100%', maxWidth: '160px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {post.location}
                       </Typography>
 
@@ -184,7 +237,11 @@ export default function Board() {
             })}
           </div>
         ) : (
-          <p>No Data</p>
+          <div style={{ display: 'flex', alignItems: 'center', height: '100%', justifyContent: 'center' }}>
+            <Typography variant="body1" textAlign={'center'}>
+              등록된 아이템이 없습니다.
+            </Typography>
+          </div>
         )}
 
         <div style={{ width: '100%', textAlign: 'center', padding: '10px 0 20px 0' }}>
@@ -213,19 +270,3 @@ export default function Board() {
     </Background>
   );
 }
-
-const actions = [
-  {
-    icon: (
-      <Link to={'/post'} style={{ textDecoration: 'none', color: '#5f5f5f', display: 'flex' }}>
-        <EditIcon />
-      </Link>
-    ),
-    name: '글쓰기',
-  },
-  // 추후 목록 수정
-  { icon: <CreateIcon />, name: 'ds' },
-  { icon: <SaveIcon />, name: 'Save' },
-  { icon: <PrintIcon />, name: 'Print' },
-  { icon: <ShareIcon />, name: 'Share' },
-];

@@ -9,6 +9,12 @@ import Post from 'pages/Post';
 import PostDetail from 'pages/PostDetail';
 import Chatting from 'pages/Chatting';
 import ChatList from 'pages/ChatList';
+import MyPage from 'pages/MyPage';
+import Favorite from 'pages/Favorite';
+import PostUpdate from 'pages/PostUpdate';
+import SellList from 'pages/SellList';
+import Category from 'pages/Category';
+import UpdateUser from 'pages/UpdateUser';
 
 function App() {
   return (
@@ -22,6 +28,12 @@ function App() {
         <Route path="/postDetail" element={<PostDetail />} />
         <Route path="/chatting" element={<Chatting />} />
         <Route path="/chatList" element={<ChatList />} />
+        <Route path="/myPage" element={<MyPage />} />
+        <Route path="/favorite" element={<Favorite />} />
+        <Route path="/postUpdate" element={<PostUpdate />} />
+        <Route path="/sellList" element={<SellList />} />
+        <Route path="/category" element={<Category />} />
+        <Route path="updateUser" element={<UpdateUser />} />
       </Routes>
     </BrowserRouter>
   );

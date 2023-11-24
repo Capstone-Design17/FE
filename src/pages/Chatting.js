@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import { useRef } from 'react';
 import SendIcon from '@mui/icons-material/Send';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -228,12 +228,13 @@ export default function Chatting() {
           <Grid item xs={1}>
             {/* 채팅 리스트로 돌아가기 */}
             <Link to="/chatList" style={{ color: 'black' }}>
-              <ArrowBackIcon />
+              <ArrowBackIosIcon />
             </Link>
           </Grid>
           <Grid item xs>
             <Typography variant="h6" fontWeight={'bold'}>
-              {state.sellerId}
+              {/* 내가 아닌 이름 출력 */}
+              {userId === state.sellerId ? state.userId : state.sellerId}
             </Typography>
           </Grid>
           <Grid item>
@@ -247,7 +248,6 @@ export default function Chatting() {
           {/* State로 받기가 좋아보이나 채팅 목록에서 받는건 힘들어보이기도.. */}
           <Grid item style={{ color: 'white' }} mr={2}>
             {/* Avatar? */}
-            {/* <img src={profileImgUrl} style={{ maxWidth: '50px', maxHeight: '50px', objectFit: 'cover'}} /> */}
             <Avatar src={state.image} sx={{ width: 56, height: 56 }} />
           </Grid>
           <Grid

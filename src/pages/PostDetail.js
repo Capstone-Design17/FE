@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import Grid from '@mui/material/Grid';
 import { Link } from 'react-router-dom';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Avatar, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -15,6 +15,9 @@ import createdAt from 'utils/Time';
 import Carousel from 'react-material-ui-carousel';
 import { Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import Snackbar from '@mui/material/Snackbar';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import EditIcon from '@mui/icons-material/Edit';
 
 export default function PostDetail() {
   const navigate = useNavigate();
@@ -28,7 +31,7 @@ export default function PostDetail() {
   const [post, setPost] = useState([]);
   const [imageList, setImageList] = useState([]);
   // const profileImgUrl = 'http://localhost:80/image/user.png';
-  const profileImgUrl = '/image/user.png'; // 실제 환경 Url
+  // const profileImgUrl = '/image/user.png'; // 실제 환경 Url
 
   // Session의 UserId가 Post의 UserId와 같으면 수정/삭제 버튼 생김
 
@@ -70,17 +73,141 @@ export default function PostDetail() {
     navigate('/chatting', { state: { postNum: postNumber, sellerId: sellerId, title: title, price: price, image: thumbnail } });
   };
 
+  const [favorite, setFavorite] = useState(0);
+  const [snackMessage, setSnackMessage] = useState('');
+  useEffect(() => {
+    if (userId !== '') {
+      axios({
+        url: '/api/board/favorite',
+        method: 'get',
+        params: {
+          userId: userId,
+          postNum: state,
+        },
+      })
+        .then((response) => {
+          console.log(response.data);
+          if (response.status === 200) {
+            if (response.data.message === '관심 등록 확인 성공') {
+              console.log('관심 등록 조회 성공');
+              setFavorite(response.data.data.status);
+            } else {
+              console.log(response.data.message);
+              setFavorite(1);
+            }
+          } else {
+            throw new Error('정의되지 않은 에러');
+          }
+        })
+        .catch((error) => alert(error));
+    }
+  }, [userId]);
+
+  const [stateSnack, setStateSnack] = React.useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'center',
+  });
+  const { vertical, horizontal, open } = stateSnack;
+
+  const handleClick = (newState) => () => {
+    // // axios 호출
+    console.log(userId + ': ' + state + ': ' + favorite);
+    axios({
+      url: '/api/board/favorite',
+      method: 'post',
+      data: {
+        userId: userId,
+        postNum: state,
+        status: favorite,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          console.log(response.data.message);
+          if (response.data.message === '관심 등록 성공') {
+            setSnackMessage('관심 목록에 등록했습니다.');
+            setFavorite(response.data.data.status);
+            setStateSnack({ ...newState, open: true });
+          } else if (response.data.message === '관심 등록 취소 성공') {
+            setSnackMessage('관심 목록을 취소했습니다.');
+            setFavorite(response.data.data.status);
+            setStateSnack({ ...newState, open: true });
+          } else {
+            console.log(response.data.message);
+          }
+        } else {
+          throw new Error('');
+        }
+      })
+      .catch((error) => alert(error));
+  };
+
+  const handleClose = () => {
+    setStateSnack({ ...stateSnack, open: false });
+  };
+
+  const changeStatus = () => {
+    console.log('Status 변경');
+    let chStatus = 1;
+    if (post.status !== 0) {
+      chStatus = 0;
+    }
+    console.log(chStatus);
+
+    axios({
+      url: '/api/board/post',
+      method: 'patch',
+      data: {
+        postNum: post.postNum,
+        status: chStatus,
+      },
+    })
+      .then((response) => {
+        console.log(response.data);
+        if (response.status === 200) {
+          if (response.data.message === '게시글 상태 수정 성공') {
+            setPost(response.data.data);
+          } else {
+            alert(response.data.message);
+          }
+        } else {
+          throw new Error('정의되지 않은 에러');
+        }
+      })
+      .catch((error) => alert(error));
+  };
+
   return (
     <Background>
       <Navbar getUserId={getUserId} userId={userId} />
-      <Grid container style={{ backgroundColor: '#d32f2f' }} p={1}>
+      <Grid container style={{ backgroundColor: '#d32f2f' }} p={1} pr={2} pl={2}>
         <Grid item xs>
           <Link to={'/board'} style={{ textDecoration: 'none', color: 'white' }}>
-            <ArrowBackIcon />
+            <ArrowBackIosIcon />
           </Link>
         </Grid>
-        <Grid item>
-          <FavoriteBorderIcon style={{ color: 'white' }} />
+        <Grid item display={'flex'}>
+          {/* 관심등록 or 수정*/}
+          {userId === post.userId ? (
+            <div>
+              <EditIcon
+                onClick={() => {
+                  console.log('Update: ' + post.postNum);
+                  navigate('/postUpdate', { state: { postNum: post.postNum } });
+                }}
+                style={{ color: 'white' }}
+              />
+            </div>
+          ) : favorite === 0 ? (
+            <div onClick={handleClick({ vertical: 'top', horizontal: 'left' })}>
+              <FavoriteBorderIcon style={{ color: 'white' }} />
+            </div>
+          ) : (
+            <div onClick={handleClick({ vertical: 'top', horizontal: 'left' })}>
+              <FavoriteIcon style={{ color: 'white' }} />
+            </div>
+          )}
         </Grid>
       </Grid>
 
@@ -168,11 +295,12 @@ export default function PostDetail() {
 
           {/* User */}
           <Grid container direction="row" style={{ borderBottom: '1px solid #d3d3d3' }} p={2}>
-            <Grid item xs={2} mr={2} style={{ display: 'flex' }}>
+            <Grid item xs={2} mr={2} style={{ display: 'flex', alignItems: 'center' }}>
               {/* 프로필 사진 */}
               {/* <Avatar */}
 
-              <Avatar alt="" src={profileImgUrl} sx={{ width: 56, height: 56 }} />
+              {/* <Avatar alt="" src={profileImgUrl} sx={{ width: 56, height: 56 }} /> */}
+              <Avatar alt="" sx={{ width: 56, height: 56 }} />
             </Grid>
             <Grid container item direction="column" xs mt={1}>
               <Grid item>
@@ -256,12 +384,33 @@ export default function PostDetail() {
               채팅하기
             </Typography>
           ) : (
-            <Typography variant="h6" fontWeight={'bold'}>
-              내 게시물
-            </Typography>
+            <Grid container direction={'column'}>
+              <Grid item>
+                <Typography variant="subtitle1" fontWeight={'bold'} onClick={changeStatus}>
+                  {/* 클릭 시 판매 상태 변환 */}
+                  변경하기
+                </Typography>
+              </Grid>
+              <Grid item height={'20px'} padding={0}>
+                {/* Status에 따라 바뀜 */}
+                {post.status === 0 ? (
+                  <Typography variant="caption" fontWeight={'bold'}>
+                    판매완료
+                  </Typography>
+                ) : (
+                  <Typography variant="caption" fontWeight={'bold'}>
+                    판매중
+                  </Typography>
+                )}
+              </Grid>
+            </Grid>
           )}
         </Grid>
       </Grid>
+      <Box sx={{ width: 500 }}>
+        {/* {action} */}
+        <Snackbar anchorOrigin={{ vertical, horizontal }} autoHideDuration={3000} open={open} onClose={handleClose} message={snackMessage} key={vertical + horizontal} />
+      </Box>
       <BottomNav />
     </Background>
   );

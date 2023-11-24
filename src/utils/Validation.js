@@ -23,7 +23,7 @@ export const isName = (name) => {
 
 // 별명 유효성 검사
 export const isNickName = (nickName) => {
-  const nickNameRegex = new RegExp('^[ㄱ-ㅎ가-힣a-z0-9-_]{2,10}$');
+  const nickNameRegex = new RegExp('^[ㄱ-ㅎ가-힣a-zA-Z0-9-_]{2,10}$');
   return nickNameRegex.test(nickName);
 };
 
