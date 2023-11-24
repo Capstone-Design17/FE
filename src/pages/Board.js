@@ -177,10 +177,7 @@ export default function Board() {
           }}
         ></TextField>
 
-        {/* 이미지 접근 예시 */}
-        {/* nginx proxy로 접근 */}
-        {/* <img src='/image/default.png' style={{width: '120px', marginBottom: '10px'}}/> */}
-
+        {/* Image nginx proxy로 접근 */}
         {/* 반복 Card 구조*/}
         {isLoading ? (
           <div style={{ display: 'flex', alignItems: 'center', height: '100%', justifyContent: 'center' }}>
