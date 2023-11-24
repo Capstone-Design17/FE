@@ -31,7 +31,7 @@ export default function PostDetail() {
   const [post, setPost] = useState([]);
   const [imageList, setImageList] = useState([]);
   // const profileImgUrl = 'http://localhost:80/image/user.png';
-  const profileImgUrl = '/image/user.png'; // 실제 환경 Url
+  // const profileImgUrl = '/image/user.png'; // 실제 환경 Url
 
   // Session의 UserId가 Post의 UserId와 같으면 수정/삭제 버튼 생김
 
@@ -295,11 +295,12 @@ export default function PostDetail() {
 
           {/* User */}
           <Grid container direction="row" style={{ borderBottom: '1px solid #d3d3d3' }} p={2}>
-            <Grid item xs={2} mr={2} style={{ display: 'flex' }}>
+            <Grid item xs={2} mr={2} style={{ display: 'flex', alignItems: 'center' }}>
               {/* 프로필 사진 */}
               {/* <Avatar */}
 
-              <Avatar alt="" src={profileImgUrl} sx={{ width: 56, height: 56 }} />
+              {/* <Avatar alt="" src={profileImgUrl} sx={{ width: 56, height: 56 }} /> */}
+              <Avatar alt="" sx={{ width: 56, height: 56 }} />
             </Grid>
             <Grid container item direction="column" xs mt={1}>
               <Grid item>

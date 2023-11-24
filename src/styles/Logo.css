@@ -1,24 +1,7 @@
 .App-logo {
   flex-grow: 0;
-  height: 120px;
   top: 0;
   pointer-events: none;
-  margin-top: 20px;
-}
-
-/* 삭제 예정 */
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-/* 아마도 삭제 */
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  margin-top: 300px;
+  max-width: 360px;
 }
