@@ -4,3 +4,7 @@
   flex-direction: column;
   /* margin-bottom: 20px; */
 }
+
+.css-1qyolli-MuiCardContent-root:last-child {
+  padding-bottom: 0 !important;
+}

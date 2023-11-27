@@ -70,7 +70,8 @@ export default function PostDetail() {
     console.log(postNumber);
     // const thumbnail = 'http://localhost:80/image/' + image.uuid;
     const thumbnail = '/image/' + image.uuid; // 실제 환경 Url
-    navigate('/chatting', { state: { postNum: postNumber, sellerId: sellerId, title: title, price: price, image: thumbnail } });
+    console.log('확인' + postNumber + ' ' + sellerId + ' ' + title + ' ' + price + ' ' + image);
+    navigate('/chatting', { state: { postNum: postNumber, sellerId: sellerId, userId: userId, title: title, price: price, image: thumbnail } });
   };
 
   const [favorite, setFavorite] = useState(0);
@@ -367,7 +368,7 @@ export default function PostDetail() {
       <Grid container sx={{ boxShadow: 3, textAlign: 'center' }}>
         <Grid item xs={6} style={{ display: 'flex', alignItems: 'center' }}>
           <Typography variant="h6" fontWeight={'bold'} color={'text.secondary'} sx={{ width: '100%' }} p={1}>
-            {post.status === 0 ? '판매중' : '판매완료'}
+            {post.status === 0 ? '판매중' : '거래완료'}
             {/* 판매중(0), 예약중(1), 판매완료(2), 삭제됨(3) */}
           </Typography>
         </Grid>
@@ -395,7 +396,7 @@ export default function PostDetail() {
                 {/* Status에 따라 바뀜 */}
                 {post.status === 0 ? (
                   <Typography variant="caption" fontWeight={'bold'}>
-                    판매완료
+                    거래완료
                   </Typography>
                 ) : (
                   <Typography variant="caption" fontWeight={'bold'}>
