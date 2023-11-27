@@ -3,6 +3,7 @@ import 'styles/Login.css';
 import Background from 'components/Background.js';
 import { Link, useNavigate } from 'react-router-dom';
 // import {isId, isPw} from '../utils/Validation.js';
+import { Button } from '@mui/material';
 import axios from 'axios';
 
 function Login() {
@@ -68,7 +69,20 @@ function Login() {
 
   return (
     <Background>
-      <div className="titleWrap">로그인하세요</div>
+      <div className="titleWrap" style={{ display: 'flex', justifyContent: 'space-between' }}>
+        로그인하세요
+        <Button
+          onClick={() => {
+            setId('spring');
+            setPw('spring@123');
+            console.log(id);
+            console.log(pw);
+            login();
+          }}
+        >
+          테스트 로그인
+        </Button>
+      </div>
 
       <div className="contentWrap">
         <div className="inputTitle">아이디</div>
