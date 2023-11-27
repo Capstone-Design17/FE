@@ -9,11 +9,9 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import axios from 'axios';
-import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Box from '@mui/material/Box';
-import createdAt from 'utils/Time';
 
 export default function SellList() {
   const navigate = useNavigate();
@@ -67,7 +65,7 @@ export default function SellList() {
   return (
     <Background>
       <Navbar getUserId={getUserId} userId={userId} />
-      <div className="contentWrap">
+      <div style={{ padding: '16px 16px 8px 16px', marginTop: '8px' }}>
         <Grid container mb={2}>
           <Grid item display={'flex'} alignItems={'center'} onClick={() => navigate('/myPage')}>
             <ArrowBackIosIcon />
@@ -97,10 +95,11 @@ export default function SellList() {
             </Typography>
           </Button>
         </ButtonGroup>
-
+      </div>
+      <div style={{ overflow: 'scroll', display: 'flex', flexDirection: 'column', height: '100%' }}>
         {/* 받은 데이터를 출력 */}
         {/* 각 포스트를 클릭하면 PostDetail로 연결 */}
-        <div style={{ height: '100%' }}>
+        <div>
           {post.length > 0 ? (
             post.map((post, index) => {
               console.log(status + ': ' + post.status);
@@ -108,48 +107,34 @@ export default function SellList() {
                 // const imageUrl = 'http://localhost:80/image/' + post.image.uuid;
                 const imageUrl = '/image/' + post.image.uuid; // 운영 환경의 url
                 return (
-                  <Card
-                    key={index}
-                    sx={{ display: 'flex', margin: '10px 0', height: '140px' }}
-                    onClick={() => {
-                      clickPost(post.postNum);
-                    }}
-                  >
-                    <CardMedia component="img" sx={{ maxWidth: 120, minWidth: 120, maxHeight: 140, objectFit: 'cover', overflow: 'hidden' }} image={imageUrl} alt="default" />
-                    <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', margin: '10px' }}>
-                      <CardContent sx={{ flex: '1 0 auto', p: 1 }} style={{ paddingBottom: '8px' }}>
-                        <Grid container item xs direction="row" p={0} m={0}>
-                          <Grid item pr={1} xs>
-                            <Typography component="h4" variant="subtitle1" style={{ maxWidth: '160px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                              {post.title}
-                            </Typography>
-                          </Grid>
-                          <Grid item>
-                            <Typography variant="caption" color="text.secondary" component="div" style={{ minWidth: '37px' }}>
-                              {createdAt(post.createAt)}
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                        <Typography variant="caption" color="text.secondary" component="div" style={{ height: '40px', maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                          {post.location}
-                        </Typography>
+                  <div key={index}>
+                    <div
+                      style={{ display: 'flex', padding: '16px', marginBottom: '10px' }}
+                      onClick={() => {
+                        clickPost(post.postNum);
+                      }}
+                    >
+                      <CardMedia component="img" sx={{ minHeight: 110, maxWidth: 110, maxHeight: 110, objectFit: 'cover', overflow: 'hidden', borderRadius: '10px' }} image={imageUrl} alt="default" />
+                      <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }} pl={2}>
+                        <CardContent sx={{ flex: '1 0 auto', padding: '0', margin: '0', paddingBottom: '0' }}>
+                          <Typography component="h4" variant="subtitle1" style={{ maxWidth: '230px', marginTop: '7px', fontWeight: '600', overflow: 'hidden', textOverflow: 'ellipsis', lineHeight: '1.2rem' }}>
+                            {post.title}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary" component="div" style={{ maxWidth: '210px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginTop: '5px' }}>
+                            {post.location}
+                          </Typography>
 
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} style={{ paddingTop: '10px' }}>
-                          <Typography variant="subtitle1">{post.price}원</Typography>
-                          {post.status === 0 ? (
-                            <Typography variant="overline" color={'green'} sx={{ border: 1, borderRadius: 1, textAlign: 'center', width: '60px', height: '30px' }}>
-                              판매중
-                              {/* post.status에 따라 다른 값 : 판매중(0), 판매완료(1), 예약중(2), 삭제된(3) */}
+                          <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '4px' }}>
+                            <Typography variant="subtitle1" fontSize={'15px'} fontWeight={'bold'} color={'#FF523A'} mr={1}>
+                              {post.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원
                             </Typography>
-                          ) : (
-                            <Typography variant="overline" color={'error'} sx={{ border: 1, borderRadius: 1, textAlign: 'center', width: '60px', height: '30px' }}>
-                              판매완료
-                            </Typography>
-                          )}
-                        </Box>
-                      </CardContent>
-                    </Box>
-                  </Card>
+                            {post.status === 0 ? null : <div style={{ fontSize: '12px', fontWeight: 'bold', lineHeight: '1.2rem', padding: '2px 4px', backgroundColor: '#2c2c2c', borderRadius: '3px', color: 'white', textAlign: 'center' }}>거래완료</div>}
+                          </Box>
+                        </CardContent>
+                      </Box>
+                    </div>
+                    <div style={{ display: 'block', borderBottom: '1px solid lightgray', margin: '0 16px', padding: '0' }} />
+                  </div>
                 );
               }
             })
