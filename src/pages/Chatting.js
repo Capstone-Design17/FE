@@ -23,7 +23,7 @@ export default function Chatting() {
   // WebSocket을 이용한 데이터 통신
 
   const navigate = useNavigate();
-  const { state } = useLocation();
+  const { state } = useLocation(null);
   const [userId, setUserId] = useState('');
   const getUserId = (id) => {
     setUserId(id);
@@ -43,14 +43,16 @@ export default function Chatting() {
   const [roomId, setRoomId] = useState('');
   // RoomId를 받아옴
   useEffect(() => {
-    if (userId !== '') {
+    console.log('state.userId:' + state.userId);
+    if (userId !== '' && state.userId !== undefined) {
       console.log('RoomId 호출');
+      console.log(userId + ': ' + state.userId);
       axios({
         url: '/api/chat/room',
         method: 'post',
         data: {
           sellerId: state.sellerId,
-          userId: userId,
+          userId: state.userId,
           postNum: state.postNum,
         },
       })
@@ -69,7 +71,7 @@ export default function Chatting() {
         })
         .catch((error) => alert(error));
     }
-  }, [userId]);
+  }, [userId, state]);
 
   useEffect(() => {
     if (state.postNum !== null) {

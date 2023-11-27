@@ -137,7 +137,7 @@ export default function MyPage() {
               <NotificationsNoneIcon />
             </Grid>
             <Grid item xs>
-              <Typography variant="body1" fontWeight={'bold'} onClick={() => favorite()}>
+              <Typography variant="body1" fontWeight={'bold'} onClick={() => {}}>
                 공지사항
               </Typography>
             </Grid>
@@ -147,7 +147,7 @@ export default function MyPage() {
               <InfoIcon />
             </Grid>
             <Grid item xs>
-              <Typography variant="body1" fontWeight={'bold'} onClick={() => sellList()}>
+              <Typography variant="body1" fontWeight={'bold'} onClick={() => {}}>
                 이용약관
               </Typography>
             </Grid>
